@@ -1,0 +1,82 @@
+[[VK_MESAX_external_memory_dma_buf]]
+== VK_MESAX_external_memory_dma_buf
+
+*Name String*::
+    VK_MESAX_external_memory_dma_buf
+*Extension Type*::
+    Device extension
+*Registered Extension Number*::
+    126
+*Status*::
+    Draft
+*Last Modified Date*::
+    See git log.
+*Revision*::
+    0.4 (Unstable Draft)
+*IP Status*::
+    No known IP claims.
+*Dependencies*::
+  - This extension is written against version 1.0.42 of the Vulkan API.
+  - Requires <<VK_KHX_external_memory_fd>>.
+  - Interacts with <<VK_KHX_external_memory_capabilities>>.
+*Contributors*::
+  - Antoine Labour, Google <piman@chromium.org>
+  - Chad Versace, Google <chadversary@chromium.org>
+  - James Jones <jajones@nvidia.com>
+  - Jason Ekstrand <jason.ekstrand@intel.com>
+  - Kristian Høgsberg Kristensen <hoegsberg@chromium.org>
+*Contact*::
+  - Chad Versace, Google <chadversary@chromium.org>
+
+A dma_buf is a type of file descriptor, defined by the Linux kernel, that
+allows sharing memory across kernel device drivers and across processes.
+
+This extension enables applications to import a dma_buf as
+slink:VkDeviceMemory; to export slink:VkDeviceMemory as a dma_buf; and to
+create slink:VkBuffer and slink:VkImage objects that can: be bound to that
+memory.
+
+=== New Object Types
+
+None.
+
+=== New Enum Constants
+
+  * Extending elink:VkExternalMemoryHandleTypeFlagBitsKHX:
+  ** ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_MESAX
+
+=== New Enums
+
+None.
+
+=== New Structs
+
+None.
+
+=== New Functions
+
+None.
+
+=== Issues
+
+None.
+
+=== Version History
+
+ * Revision 0.4, 2017-02-27 (Chad Versace)
+    - When sharing an external handle, the pname:driverUUID must be identical.
+      Drop that requirement for dma_bufs.
+    - When importing an opaque fd, the memory must have been allocated on the
+      same underlying physical device as the importing sname:VkDevice.  Drop
+      that requirement for dma_bufs.
+
+ * Revision 0.3, 2017-02-16 (Chad Versace)
+    - Replace vendor prefix EXT with MESAX because this is an experimental
+      extension.
+
+ * Revision 0.2, 2016-12-08 (Chad Versace)
+    - Split into VK_EXT_external_memory_dma_buf and
+      VK_EXT_external_image_dma_buf.
+
+ * Revision 0.1, 2012-12-02 (Chad Versace)
+    - Initial draft

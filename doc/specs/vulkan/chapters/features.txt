@@ -4250,14 +4250,19 @@ include::../api/enums/VkExternalMemoryHandleTypeFlagBitsKHX.txt[]
      handle returned by sname:ID3D12Device::fname:CreateSharedHandle
      referring to a Direct3D 12 committed resource.
      It owns a reference to the memory used by the Direct3D resource.
+ifdef::VK_MESAX_external_memory_dma_buf[]
+  ** ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_MESAX is a file
+     descriptor for a Linux dma_buf.
+     It owns a reference to the underlying memory resource represented by
+     its Vulkan memory object.
+endif::VK_MESAX_external_memory_dma_buf[]
 
 If pname:handleType is 0, flink:vkGetPhysicalDeviceImageFormatProperties2KHR
 will behave as if slink:VkPhysicalDeviceExternalImageFormatInfoKHX was not
 present and slink:VkExternalImageFormatPropertiesKHX will be ignored.
 
-If pname:handleType is not compatible with the pname:format, pname:type,
-pname:tiling, pname:usage, and pname:flags specified in
-slink:VkPhysicalDeviceImageFormatInfo2KHR, then
+If pname:handleType is not compatible with the parameters specified in
+slink:VkPhysicalDeviceImageFormatInfo2KHR and its pname:pNext chain, then
 flink:vkGetPhysicalDeviceImageFormatProperties2KHR returns
 ename:VK_ERROR_FORMAT_NOT_SUPPORTED.
 
