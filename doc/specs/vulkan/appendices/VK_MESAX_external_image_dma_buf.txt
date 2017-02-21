@@ -1,0 +1,231 @@
+[[VK_MESAX_external_image_dma_buf]]
+== VK_MESAX_external_image_dma_buf
+
+*Name String*::
+    +VK_MESAX_external_image_dma_buf+
+*Extension Type*::
+    Device extension
+*Registered Extension Number*::
+    127
+*Last Modified Date*::
+    See git log.
+*Revision*::
+    0.6 (Unstable Draft)
+*IP Status*::
+    Draft
+*Dependencies*::
+  - This extension is written against version 1.0.42 of the Vulkan API.
+  - Requires <<VK_MESAX_external_memory_dma_buf>>.
+  - Requires <<VK_EXT_get_image_properties>>.
+*Contributors*::
+  - Antoine Labour, Google <piman@chromium.org>
+  - Chad Versace, Google <chadversary@chromium.org>
+  - James Jones <jajones@nvidia.com>
+  - Jason Ekstrand <jason.ekstrand@intel.com>
+  - Kristian Høgsberg Kristensen <hoegsberg@chromium.org>
+*Contact*::
+  - Chad Versace, Google <chadversary@chromium.org>
+
+TODO: Write overview.
+
+=== New Object Types
+
+None.
+
+=== New Enum Constants
+
+    * Extending elink:VkStructureType:
+    ** ename:VK_STRUCTURE_TYPE_DMA_BUF_FORMAT_PROPERTIES_MESAX
+    ** ename:VK_STRUCTURE_TYPE_DMA_BUF_IMAGE_FORMAT_PROPERTIES_MESAX
+    ** ename:VK_STRUCTURE_TYPE_IMPORT_IMAGE_DMA_BUF_INFO_MESAX
+    ** ename:VK_STRUCTURE_TYPE_EXPORT_IMAGE_DMA_BUF_INFO_MESAX
+    ** ename:VK_STRUCTURE_TYPE_IMAGE_DMA_BUF_PROPERTIES_MESAX
+
+=== New Enums
+
+None.
+
+=== New Structs
+
+  * slink:VkDmaBufFormatPropertiesMESAX
+  * slink:VkDmaBufFormatModifierPropertiesMESAX
+  * slink:VkDmaBufImageFormatPropertiesMESAX
+  * slink:VkDmaBufImageFormatModifierPropertiesMESAX
+  * slink:VkImportImageDmaBufInfoMESAX
+  * slink:VkImportImageDmaBufPlaneInfoMESAX
+  * slink:VkExportImageDmaBufInfoMESAX
+  * slink:VkImageDmaBufPropertiesMESAX
+  * slink:VkImageDmaBufPlanePropertiesMESAX
+
+=== New Functions
+
+None.
+
+=== Issues
+
+1. Does this extension support external images with planar formats (such as
+YUV)?
++
+*RESOLVED*. This extension alone does not provide that support.  Vulkan 1.0
+defines no planar VkFormat, and this extension is not the appropriate place to
+do so.  However, future extensions may leverage
+VkImportImageDmaBufPlaneInfoMESAX to provide support for external images with
+planar formats.
++
+However, even for non-planar formats, a DRM format modifier can require
+multiple planes.  For example, consider an external image with format
+VK_FORMAT_R8G8B8A8_UNORM and with hypothetical DRM format modifier
+DRM_FORMAT_MOD_CLEVER_COMPRESSION. Suppose that the documentation for
+DRM_FORMAT_MOD_CLEVER_COMPRESSION specifies that the image consists of two
+planes, where the first is the primary plane and the second is a compression
+metadata plane. Then the application would import such an image with:
++
+................................................................................
+    VkImportImageDmaBufInfoMESAX info = {
+        .sType = VK_STRUCTURE_TYPE_IMPORT_IMAGE_DMA_BUF_INFO_MESAX,
+        .drmFormatModifier = DRM_FORMAT_MOD_CLEVER_COMPRESSION,
+        .planeCount = 2,
+        .pPlanes = (VkImportImageDmaBufPlaneInfoMESAX[]) {
+            /*primaryPlane*/  { .offset = ..., .size = ..., .rowPitch = ..., },
+            /*metadataPlane*/ { .offset = ..., .size = ..., .rowpitch = ..., },
+        },
+    };
+................................................................................
+
+2. Should VkImportImageDmaBufInfoMESAX define a single DRM format modifier
+per VkImage? Or define one per plane?
++
+*RESOLVED*. There exists a single DRM format modifier per VkImage.
++
+Even though [EGL_EXT_image_dma_buf_import_modifiers] and the kernel's DRM APIs
+(see [drm_mode_fb_cmd2]) allow defining one modifier per plane, developers of
+those APIs concede it was a mistake. The kernel's modesetting APIs will,
+beginning in Linux 4.10, enforce that the user provides the same DRM format
+modifier for each plane.
++
+See Linux commit <https://cgit.freedesktop.org/~airlied/linux/commit/?h=drm-next&id=bae781b259269590109e8a4a8227331362b88212>.
+
+3. What should this extension be named?
++
+*PROPOSAL*. VK_MESAX_external_image_dma_buf
++
+*DISCUSSION*. The "dma_buf" in VK_MESAX_external_image_dma_buf is misleading
+because the feature is about DRM format modifiers and not dma_bufs. However,
+the extension is closely related to VK_MESAX_external_memory_dma_buf and
+[EGL_EXT_image_dma_buf_import_modifiers].
+
+4. Should structs slink:VkImportImageDmaBufInfoMESAX and
+slink:VkImageDmaBufPropertiesMESAX remain separate or be merged into
+a single struct?
++
+*DISCUSSION*. The two structs are identical other than the constness of their
+member pointers. They differ only in how they are used: one is an input to
+flink:vkCreateImage and the other is an output from
+flink:vkGetImagePropertiesEXT. Maintaining separate structs will prevent
+static type errors and may simplify the specification text, but may appear
+awkward to some developers.
+
+5. Should this extension assign an explicit size to each plane? Or should the
+plane's size be defined implicitly its row pitch? Specifically, should
+slink:VkImportImageDmaBufImagePlaneInfoMESAX and
+slink:VkImageDmaBufPlanePropertiesMESAX
+have a pname:size member in addition to pname:rowPitch?
++
+*DISCUSSION*. Related APIs do not define an explicit size to each plane.
+They define only the plane's offset and row pitch.
+See the EGL extensions
+[EGL_EXT_image_dma_buf_import],
+[EGL_EXT_image_dma_buf_import_modifiers],
+and [EGL_MESA_image_dma_buf_export];
+see [struct drm_mode_fb_cmd2] in the Linux kernel's userspace api;
+and see [gbm.h].
++
+However, Vulkan differs from the above APIs in significant ways that influence
+this issue.
++
+.. **Separation of image creation and memory binding.**
+When importing a dma_buf image into EGL and GBM, the API creates the image
+(EGLImage or gbm_bo) and binds it to memory (the dma_buf) simultaneously. In
+Vulkan, not only are image creation and memory binding separate, but the user
+may create the image even before memory is allocated.  This difference allows
+EGL and GBM to query the dma_buf's size before image creation; Vulkan cannot.
+
+.. **Dedicated memory.**
+When importing or exporting a dma_buf image in the above non-Vulkan APIs,
+common practice mandates that the dma_buf memory is dedicated to the image, in
+the sense of `VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHX`. In
+particular, neither the GBM documentation nor the EGL extension specifications
+explicitly state this requirement, but this is likely due to
+under-specification rather than intentional omission.  In contrast, this
+extension does not require that the implementation report
+`VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHX` for external dma_buf
+memory.
++
+Points 1 and 2 influence this issue because, in special cases, the plane's
+height and row pitch may not be sufficient to determine the plane's actual
+size. For example, this case could occur if the plane has
+implementation-specific vertical padding requirements; or if there exists
+subtle disagreement between the current Vulkan instance and the dma_buf's
+external consumers on how the plane's size should be calculated, which is
+a real concern for exotic DRM format modifiers.
++
+*PROPOSED SOLUTION*. Assign an explicit size to each plane. It reduces security
+risks. It eliminates ambiguity when the plane's height and row pitch are
+insufficient to determine the plane's actual size. It conforms to Vulkan's
+overall attitude of preferring explicit rather than implicit.  And it has no
+apparent disadvantages.
+
+6. Should suppoort for DRM format modifiers be moved to a separate extension?
++
+*DISCUSSION*. People have argued for the split, pointing out that EGL has
+a similar split ([EGL_EXT_image_dma_buf_import_modifiers] is layered atop
+[EGL_EXT_image_dma_buf_import]). The EGL split has been beneficial to drivers
+that don't yet define any DRM format modifiers in drm_fourcc.h.
++
+People have argued against the split, claiming that the split in EGL is
+a historical accident. They argue that the Linux ecosystem has recently
+standardized on DRM format modifiers and that Vulkan should avoid supporting
+legacy methods for dma_buf sharing.
++
+*UNRESOLVED.* Feedback from more developers is needed.
+
+==== Version History
+
+ * Revision 0.7, 2017-03-06 (Chad Versace)
+    - Require +VK_EXT_get_image_properties+.
+    - Replace query fname:vkExportDmaBufImageMESAX with
+      fname:vkGetImagePropertiesEXT and sname:VkImageDmaBufPropertiesMESAX.
+    - Rename structs to clarify their usage.
+
+ * Revision 0.6, 2017-02-27 (Chad Versace)
+    - Add issue #6, should support for DRM format modifiers be moved to
+      a separate extensions.
+
+ * Revision 0.5, 2017-02-26 (Chad Versace)
+    - Add issue #5 regarding explicit plane size.
+
+ * Revision 0.4, 2017-02-22 (Chad Versace)
+    - Replace vendor prefix EXT with MESAX because this is an experimental
+      extension.
+    - Expand resolution to isse #1 with an example.
+
+ * Revision 0.3, 2016-12-08 (Chad Versace)
+    - Split into VK_EXT_external_memory_dma_buf and
+      VK_EXT_external_image_dma_buf.
+    - Add issue #3: What should this extension be named?
+
+ * Revision 0.2, 2016-12-08 (Chad Versace)
+     - Resolve issue #2. One DRM format modifier exists per VkImage.
+
+ * Revision 0.1, 2012-12-02 (Chad Versace)
+    - Initial draft
+
+
+==== References
+FIXME: Invalid asciidoc syntax
+
+[EGL_EXT_image_dma_buf_import]: https://https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import.txt
+[EGL_EXT_image_dma_buf_import_modifiers]: https://https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import_modifiers.txt
+[EGL_MESA_image_dma_buf_export]: https://https://www.khronos.org/registry/EGL/extensions/MESA/EGL_MESA_image_dma_buf_export.txt
+[struct drm_mode_fb_cmd2]: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/include/uapi/drm/drm_mode.h?id=refs/tags/v4.10#n392
+[gbm.h]: https://cgit.freedesktop.org/mesa/mesa/tree/src/gbm/main/gbm.h?h=17.0

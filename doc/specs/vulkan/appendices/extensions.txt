@@ -314,6 +314,10 @@ ifdef::VK_MESAX_external_memory_dma_buf[]
 include::VK_MESAX_external_memory_dma_buf.txt[]
 endif::VK_MESAX_external_memory_dma_buf[]
 
+ifdef::VK_MESAX_external_image_dma_buf[]
+include::VK_MESAX_external_image_dma_buf.txt[]
+endif::VK_MESAX_external_image_dma_buf[]
+
 // == NVIDIA `NV` Vendor Extensions
 //
 // :leveloffset: 2
