@@ -1,0 +1,59 @@
+[[VK_EXT_get_image_properties]]
+== VK_EXT_get_image_properties
+
+*Name String*::
+    +VK_EXT_get_image_properties+
+*Extension Type*::
+    Device extension
+*Registered Extension Number*::
+    TODO
+*Last Modified Date*::
+    2017-03-06
+*Revision*::
+    1.0
+*IP Status*::
+    Draft
+*Dependencies*::
+  - This extension is written against version 1.0.42 of the Vulkan API.
+*Contributors*::
+  - Chad Versace, Google <chadversary@chromium.org>
+*Contact*::
+  - Chad Versace, Google <chadversary@chromium.org>
+
+This extension provides a new entry point to query the properties of
+a tlink:VkImage.
+This extension itself, howerver, defines no queryable properties.
+Its purpose is similar to that of +VK_KHR_get_physical_device_properties2+.
+It provides a common entry point for other extensions,
+thereby eliminating a proliferation of extesnsion-specific entry points.
+
+=== New Object Types
+
+None.
+
+=== New Enum Constants
+
+    * Extending elink:VkStructureType:
+    ** ename:VK_STRUCTURE_TYPE_IMAGE_PROPERTIES_EXT
+
+=== New Enums
+
+None.
+
+=== New Structs
+
+  * slink:VkImagePropertiesEXT
+
+=== New Functions
+
+  * flink:vkGetImagePropertiesEXT
+
+=== Issues
+
+None.
+
+
+==== Version History
+
+ * Revision 1.0, 2017-03-06 (Chad Versace)
+    - First draft.

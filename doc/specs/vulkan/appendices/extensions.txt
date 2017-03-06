@@ -212,6 +212,10 @@ ifdef::VK_EXT_display_control[]
 include::VK_EXT_display_control.txt[]
 endif::VK_EXT_display_control[]
 
+ifdef::VK_EXT_get_image_properties[]
+include::VK_EXT_get_image_properties.txt[]
+endif::VK_EXT_get_image_properties[]
+
 ifdef::VK_EXT_shader_subgroup_ballot[]
 include::VK_EXT_shader_subgroup_ballot.txt[]
 endif::VK_EXT_shader_subgroup_ballot[]

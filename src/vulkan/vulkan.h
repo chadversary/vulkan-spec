@@ -300,6 +300,7 @@ typedef enum VkStructureType {
     VK_STRUCTURE_TYPE_PIPELINE_DISCARD_RECTANGLE_STATE_CREATE_INFO_EXT = 1000099001,
     VK_STRUCTURE_TYPE_IOS_SURFACE_CREATE_INFO_MVK = 1000122000,
     VK_STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK = 1000123000,
+    VK_STRUCTURE_TYPE_IMAGE_PROPERTIES_EXT = 1000199000,
     VK_STRUCTURE_TYPE_BEGIN_RANGE = VK_STRUCTURE_TYPE_APPLICATION_INFO,
     VK_STRUCTURE_TYPE_END_RANGE = VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO,
     VK_STRUCTURE_TYPE_RANGE_SIZE = (VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO - VK_STRUCTURE_TYPE_APPLICATION_INFO + 1),
@@ -5730,6 +5731,25 @@ VKAPI_ATTR VkResult VKAPI_CALL vkCreateMacOSSurfaceMVK(
 #define VK_MESAX_EXTERNAL_MEMORY_DMA_BUF_SPEC_VERSION 0
 #define VK_MESAX_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME "VK_MESAX_external_memory_dma_buf"
 
+
+#define VK_EXT_get_image_properties 1
+#define VK_EXT_GET_IMAGE_PROPERTIES_SPEC_VERSION 1
+#define VK_EXT_GET_IMAGE_PROPERTIES_EXTENSION_NAME "VK_EXT_get_image_properties"
+
+typedef struct VkImagePropertiesEXT {
+    VkStructureType    sType;
+    void*              pNext;
+} VkImagePropertiesEXT;
+
+
+typedef VkResult (VKAPI_PTR *PFN_vkGetImagePropertiesEXT)(VkDevice device, VkImage image, VkImagePropertiesEXT* pProperties);
+
+#ifndef VK_NO_PROTOTYPES
+VKAPI_ATTR VkResult VKAPI_CALL vkGetImagePropertiesEXT(
+    VkDevice                                    device,
+    VkImage                                     image,
+    VkImagePropertiesEXT*                       pProperties);
+#endif
 
 #ifdef __cplusplus
 }

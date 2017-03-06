@@ -1148,6 +1148,32 @@ memory allocation.
 
 include::../validity/structs/VkSubresourceLayout.txt[]
 
+// refBegin vkGetImagePropertiesEXT Query the properties of an image
+
+To query other properties of an image, call:
+
+include::../api/protos/vkGetImagePropertiesEXT.txt[]
+
+  * pname:device is the logical device that owns the image.
+  * pname:image is the image being queried.
+  * pname:pProperties is a pointer to a slink:VkImagePropertiesEXT structure
+    in which the properties are returned.
+
+include::../validity/protos/vkGetImagePropertiesEXT.txt[]
+
+// refBegin VkImagePropertiesEXT Structure specifying image properties
+
+The slink:VkImagePropertiesEXT structure itself specifies no queryable
+properties.  Queryable properties are instead specified by structures in its
+pname:pNext chain.  The pname:VkImagePropertiesEXT structure is defined as:
+
+include::../api/structs/VkImagePropertiesEXT.txt[]
+
+  * pname:sType is the type of this structure.
+  * pname:pNext is `NULL` or a pointer to an extension-specific structure.
+
+// refEnd VkImagePropertiesEXT
+
 // refBegin vkDestroyImage Destroy an image object
 
 To destroy an image, call:

@@ -2231,6 +2231,10 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
             <member><type>void</type>*                            <name>pNext</name></member>                    <!-- Pointer to next structure -->
             <member><type>VkBool32</type>                         <name>perViewPositionAllComponents</name></member>
         </type>
+        <type category="struct" name="VkImagePropertiesEXT">
+            <member values="VK_STRUCTURE_TYPE_IMAGE_PROPERTIES_EXT"><type>VkStructureType</type> <name>sType</name></member>
+            <member><type>void</type>* <name>pNext</name></member>
+        </type>
     </types>
 
     <!-- SECTION: Vulkan enumerant (token) definitions. -->
@@ -4773,6 +4777,12 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
             <param><type>uint32_t</type> <name>discardRectangleCount</name></param>
             <param len="discardRectangleCount">const <type>VkRect2D</type>* <name>pDiscardRectangles</name></param>
         </command>
+        <command successcodes="VK_SUCCESS">
+            <proto><type>VkResult</type> <name>vkGetImagePropertiesEXT</name></proto>
+            <param><type>VkDevice</type> <name>device</name></param>
+            <param><type>VkImage</type> <name>image</name></param>
+            <param><type>VkImagePropertiesEXT</type>* <name>pProperties</name></param>
+        </command>
     </commands>
 
     <!-- SECTION: Vulkan API interface definitions -->
@@ -6193,6 +6203,16 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
              <require>
                  <enum value="0"                                         name="VK_MESA_EXTENSION_127_SPEC_VERSION"/>
                  <enum value="&quot;VK_MESA_extension_127&quot;"         name="VK_MESA_EXTENSION_127_EXTENSION_NAME"/>
+             </require>
+         </extension>
+         <extension name="VK_EXT_get_image_properties" number="200" type="device" author="EXT" contact="Chad Versace @chadversary" supported="vulkan">
+             <!-- TODO: Replace the place-holder extension number with a reserved one. -->
+             <require>
+                 <enum value="1"                                         name="VK_EXT_GET_IMAGE_PROPERTIES_SPEC_VERSION"/>
+                 <enum value="&quot;VK_EXT_get_image_properties&quot;"   name="VK_EXT_GET_IMAGE_PROPERTIES_EXTENSION_NAME"/>
+                 <enum offset="0" extends="VkStructureType"              name="VK_STRUCTURE_TYPE_IMAGE_PROPERTIES_EXT"/>
+                 <type name="VkImagePropertiesEXT"/>
+                 <command name="vkGetImagePropertiesEXT"/>
              </require>
          </extension>
     </extensions>
