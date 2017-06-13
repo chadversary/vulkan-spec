@@ -232,8 +232,12 @@ include::../api/structs/VkPhysicalDeviceIDPropertiesKHX.txt[]
 pname:deviceUUID must: be immutable for a given device across instances,
 processes, driver APIs, and system reboots.
 
-pname:driverUUID must: be identical in all driver components that support
-sharing external objects between eachother.
+If a pair of driver components support sharing external objects with each other
+through any handle type in elink:VkExternalMemoryHandleTypeFlagsKHX,
+ifdef::VK_MESAX_external_memory_dma_buf[]
+other than ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_MESAX,
+endif::VK_MESAX_external_memory_dma_buf[]
+then pname:driverUUID must be identical in both components.
 Applications can: compare this value across instance and process boundaries,
 and can: make similar queries in external APIs to determine whether they are
 capable of sharing memory objects and resources using them with the device.

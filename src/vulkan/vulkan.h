@@ -4946,6 +4946,7 @@ typedef enum VkExternalMemoryHandleTypeFlagBitsKHX {
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_KMT_BIT_KHX = 0x00000010,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP_BIT_KHX = 0x00000020,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT_KHX = 0x00000040,
+    VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_MESAX = 0x00000080,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAG_BITS_MAX_ENUM_KHX = 0x7FFFFFFF
 } VkExternalMemoryHandleTypeFlagBitsKHX;
 typedef VkFlags VkExternalMemoryHandleTypeFlagsKHX;
@@ -5924,6 +5925,11 @@ VKAPI_ATTR VkResult VKAPI_CALL vkCreateMacOSSurfaceMVK(
     VkSurfaceKHR*                               pSurface);
 #endif
 #endif /* VK_USE_PLATFORM_MACOS_MVK */
+
+#define VK_MESAX_external_memory_dma_buf 1
+#define VK_MESAX_EXTERNAL_MEMORY_DMA_BUF_SPEC_VERSION 0
+#define VK_MESAX_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME "VK_MESAX_external_memory_dma_buf"
+
 
 #ifdef __cplusplus
 }
