@@ -20,7 +20,8 @@
 # Usage: makeKHRAndKHX targets
 
 # Load extension list, generated from vk.xml
-source config/extDependency.sh
+make config/extDependency.sh || exit
+source config/extDependency.sh || exit
 
 make clean_generated
 make EXTENSIONS="$khrExts $khxExts" APITITLE="(with all KHR and KHX extensions)" $*
