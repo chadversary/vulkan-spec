@@ -343,6 +343,11 @@ ifdef::VK_NN_vi_surface[]
 include::VK_NN_vi_surface.txt[]
 endif::VK_NN_vi_surface[]
 
+// == Mesa `MESAX` Vendor Extensions
+
+ifdef::VK_MESAX_external_memory_dma_buf[]
+include::VK_MESAX_external_memory_dma_buf.txt[]
+endif::VK_MESAX_external_memory_dma_buf[]
 
 // == NVIDIA `NV` Vendor Extensions
 //
