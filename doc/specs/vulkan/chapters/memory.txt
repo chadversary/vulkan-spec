@@ -891,12 +891,20 @@ endif::VK_KHX_external_memory_win32,VK_KHX_external_memory_fd[]
 ifdef::VK_KHX_external_memory+VK_KHX_device_group[]
   * [[VUID-VkMemoryAllocateInfo-None-00643]]
     If the parameters define an import operation and the external handle
-    specified was created by the Vulkan API, the device mask specified by
+    specified was created by the Vulkan API,
+ifdef::VK_MESAX_external_memory_dma_buf[]
+    and the external handle type is not ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_MESAX,
+endif::VK_MESAX_external_memory_dma_buf[]
+    the device mask specified by
     slink:VkMemoryAllocateFlagsInfoKHX must: match that specified when the
     memory object being imported was allocated.
   * [[VUID-VkMemoryAllocateInfo-None-00644]]
-    If the parameters define an import operation and the external handle
-    specified was created by the Vulkan API, the list of physical devices
+    If the parameters define an import operation, the external handle
+    specified was created by the Vulkan API,
+ifdef::VK_MESAX_external_memory_dma_buf[]
+    and the external handle type is not ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_MESAX,
+endif::VK_MESAX_external_memory_dma_buf[]
+    then the list of physical devices
     that comprise the logical device passed to flink:vkAllocateMemory must:
     match the list of physical devices that comprise the logical device on
     which the memory was originally allocated.
@@ -1232,8 +1240,7 @@ ifdef::VK_KHX_external_memory_fd[]
 [open,refpage='VkImportMemoryFdInfoKHX',desc='import memory created on the same physical device from a file descriptor',type='structs']
 --
 
-To import memory created on the same underlying physical device but outside
-of the current Vulkan instance from a POSIX file descriptor handle, add a
+To import memory from a POSIX file descriptor handle, add a
 slink:VkImportMemoryFdInfoKHX structure to the pname:pNext chain of the
 slink:VkMemoryAllocateInfo structure.
 The sname:VkImportMemoryFdInfoKHX structure is defined as:
@@ -1257,7 +1264,8 @@ after a successful import.
     reported by slink:VkExternalImageFormatPropertiesKHX or
     slink:VkExternalBufferPropertiesKHX.
   * [[VUID-VkImportMemoryFdInfoKHX-fd-00668]]
-    The memory from which pname:fd was exported must: have been created on
+    If pname:handleType is ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT_KHX,
+    the memory from which pname:fd was exported must: have been created on
     the same underlying physical device as pname:device.
   * [[VUID-VkImportMemoryFdInfoKHX-handleType-00669]]
     If pname:handleType is not `0`, it must: be defined as a POSIX file
@@ -1331,7 +1339,8 @@ include::../api/protos/vkGetMemoryFdPropertiesKHX.txt[]
     pname:fd must: be an external memory handle created outside of the
     Vulkan API.
   * [[VUID-vkGetMemoryFdPropertiesKHX-handleType-00674]]
-    pname:handleType must: not be one of the handle types defined as opaque.
+    pname:handleType must: not be
+    ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT_KHX.
 ****
 
 include::../validity/protos/vkGetMemoryFdPropertiesKHX.txt[]

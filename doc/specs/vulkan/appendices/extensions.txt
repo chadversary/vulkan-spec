@@ -319,6 +319,15 @@ endif::VK_IMG_filter_cubic[]
 
 // :leveloffset: 1
 
+// == Mesa `MESAX` Vendor Extensions
+//
+// :leveloffset: 2
+
+ifdef::VK_MESAX_external_memory_dma_buf[]
+include::VK_MESAX_external_memory_dma_buf.txt[]
+endif::VK_MESAX_external_memory_dma_buf[]
+
+// :leveloffset: 1
 
 // == MoltenVK `MVK` Vendor Extensions
 //
@@ -342,7 +351,6 @@ endif::VK_MVK_macos_surface[]
 ifdef::VK_NN_vi_surface[]
 include::VK_NN_vi_surface.txt[]
 endif::VK_NN_vi_surface[]
-
 
 // == NVIDIA `NV` Vendor Extensions
 //

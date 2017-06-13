@@ -1,0 +1,100 @@
+[[VK_MESAX_external_memory_dma_buf]]
+== VK_MESAX_external_memory_dma_buf
+
+*Name String*::
+    VK_MESAX_external_memory_dma_buf
+*Extension Type*::
+    Device extension
+*Registered Extension Number*::
+    126
+*Status*::
+    Draft
+*Last Modified Date*::
+    2017-06-30
+*Revision*::
+    1.0
+*IP Status*::
+    No known IP claims.
+*Dependencies*::
+  - This extension is written against version 1.0.53 of the Vulkan API.
+  - Requires <<VK_KHX_external_memory_fd>>.
+  - Interacts with <<VK_KHX_external_memory_capabilities>>.
+*Contributors*::
+  - Chad Versace, Google <chadversary@chromium.org>
+  - James Jones <jajones@nvidia.com>
+  - Jason Ekstrand <jason.ekstrand@intel.com>
+*Contact*::
+  - Chad Versace, Google <chadversary@chromium.org>
+
+A dma_buf is a type of file descriptor, defined by the Linux kernel, that
+allows sharing memory across kernel device drivers and across processes.
+
+This extension enables applications to import a dma_buf as
+slink:VkDeviceMemory; to export slink:VkDeviceMemory as a dma_buf; and to
+create slink:VkBuffer and slink:VkImage objects that can: be bound to that
+memory.
+
+[NOTE]
+.Note
+====
+This extension is *experimental* and will be removed in a future version of
+this specification. This extension is published here to provide vendors and
+application developers an opportunity to provide feedback. Vendors should: not
+expose this extension in implementations distributed to the general public.
+====
+
+=== New Object Types
+
+None.
+
+=== New Enum Constants
+
+  * Extending elink:VkExternalMemoryHandleTypeFlagBitsKHX:
+  ** ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_MESAX
+
+=== New Enums
+
+None.
+
+=== New Structs
+
+None.
+
+=== New Functions
+
+None.
+
+=== Issues
+
+None.
+
+=== Issues
+
+1. How does the application, when creating a VkImage that it intends to bind to
+   dma_buf VkDeviceMemory that contains an externally produced image, specify
+   the memory layout (such as row pitch and DRM format modifier) of the VkImage?
+   In other words, how does the application achieve behavior comparable to that provided by
+   https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import.txt[EGL_EXT_image_dma_buf_import] and
+   https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import_modifiers.txt[EGL_EXT_image_dma_buf_import_modifiers]?
++
+--
+*RESOLVED*.  Features comparable to those in
+https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import.txt[EGL_EXT_image_dma_buf_import] and
+https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import_modifiers.txt[EGL_EXT_image_dma_buf_import_modifiers]
+will be provided by an extension layered atop this one.
+--
+
+2. Without the ability to specify the memory layout of external dma_buf images,
+   how is this extension useful?
++
+--
+*RESOLVED*.  This extension provides exactly one new feature: the ability to
+import/export between dma_bufs and slink:VkDeviceMemory. This feature, together
+with features provided by <<VK_KHX_external_memory_fd>>, is sufficient to bind
+VkBuffers to dma_buf-backed VkDeviceMemory.
+--
+
+=== Version History
+
+  * Revision 1.0, 2017-06-30 (Chad Versace)
+    - Squashed internal revisions
