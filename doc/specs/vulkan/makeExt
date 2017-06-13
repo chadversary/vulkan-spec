@@ -25,7 +25,8 @@
 # Usage: makeBranch extension targets
 
 # Load extension dependencies, generated from vk.xml
-source config/extDependency.sh
+make config/extDependency.sh || exit
+source config/extDependency.sh || exit
 
 extension=$1
 shift
