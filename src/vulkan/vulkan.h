@@ -5955,8 +5955,6 @@ typedef struct VkDmaBufFormatPropertiesMESAX {
 
 typedef struct VkDmaBufImageFormatModifierPropertiesMESAX {
     uint64_t                   drmFormatModifier;
-    VkDeviceSize               maxRowPitch;
-    VkDeviceSize               rowPitchAlignment;
     VkImageFormatProperties    imageFormatProperties;
 } VkDmaBufImageFormatModifierPropertiesMESAX;
 
