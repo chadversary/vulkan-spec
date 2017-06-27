@@ -2339,8 +2339,6 @@ private version is maintained in the 1.0 branch of the member gitlab server.
         </type>
         <type category="struct" name="VkDmaBufImageFormatModifierPropertiesMESAX">
             <member><type>uint64_t</type>                 <name>drmFormatModifier</name></member>
-            <member><type>VkDeviceSize</type>             <name>maxRowPitch</name></member>
-            <member><type>VkDeviceSize</type>             <name>rowPitchAlignment</name></member>
             <member><type>VkImageFormatProperties</type>  <name>imageFormatProperties</name></member>
         </type>
         <type category="struct" name="VkDmaBufImageFormatPropertiesMESAX">
