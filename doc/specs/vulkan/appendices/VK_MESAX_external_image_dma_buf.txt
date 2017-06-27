@@ -37,6 +37,7 @@ None.
     ** ename:VK_STRUCTURE_TYPE_DMA_BUF_FORMAT_PROPERTIES_MESAX
     ** ename:VK_STRUCTURE_TYPE_DMA_BUF_IMAGE_FORMAT_PROPERTIES_MESAX
     ** ename:VK_STRUCTURE_TYPE_IMPORT_IMAGE_DMA_BUF_INFO_MESAX
+    ** ename:VK_STRUCTURE_TYPE_IMPORT_IMAGE_ASPECT_DMA_BUF_INFO_MESAX
     ** ename:VK_STRUCTURE_TYPE_EXPORT_IMAGE_DMA_BUF_INFO_MESAX
     ** ename:VK_STRUCTURE_TYPE_IMAGE_DMA_BUF_PROPERTIES_MESAX
 
@@ -51,6 +52,7 @@ None.
   * slink:VkDmaBufImageFormatPropertiesMESAX
   * slink:VkDmaBufImageFormatModifierPropertiesMESAX
   * slink:VkImportImageDmaBufInfoMESAX
+  * slink:VkImportImageAspectDmaBufInfoMESAX
   * slink:VkExportImageDmaBufInfoMESAX
   * slink:VkImageDmaBufPropertiesMESAX
 

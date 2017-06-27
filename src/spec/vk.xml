@@ -2349,12 +2349,19 @@ private version is maintained in the 1.0 branch of the member gitlab server.
             <member optional="true"><type>uint32_t</type> <name>modifierCount</name></member>
             <member optional="true" len="modifierCount"><type>VkDmaBufImageFormatModifierPropertiesMESAX</type>* <name>pModifierProperties</name></member>
         </type>
+        <type category="struct" name="VkImportImageAspectDmaBufInfoMESAX">
+            <member values="VK_STRUCTURE_TYPE_IMPORT_IMAGE_ASPECT_DMA_BUF_INFO_MESAX"><type>VkStructureType</type> <name>sType</name></member>
+            <member>const <type>void</type>* <name>pNext</name></member>
+            <member><type>VkImageAspectFlagBits</type> <name>aspect</name></member>
+            <member><type>VkDeviceSize</type> <name>size</name></member>
+            <member><type>VkDeviceSize</type> <name>rowPitch</name></member>
+        </type>
         <type category="struct" name="VkImportImageDmaBufInfoMESAX">
             <member values="VK_STRUCTURE_TYPE_IMPORT_IMAGE_DMA_BUF_INFO_MESAX"><type>VkStructureType</type> <name>sType</name></member>
             <member>const <type>void</type>*    <name>pNext</name></member>
             <member><type>uint64_t</type>       <name>drmFormatModifier</name></member>
-            <member><type>VkDeviceSize</type>   <name>size</name></member>
-            <member><type>VkDeviceSize</type>   <name>rowPitch</name></member>
+            <member><type>uint32_t</type>       <name>aspectCount</name></member>
+            <member len="aspectCount">const <type>VkImportImageAspectDmaBufInfoMESAX</type>* <name>pAspects</name></member>
         </type>
         <type category="struct" name="VkExportImageDmaBufInfoMESAX">
             <member values="VK_STRUCTURE_TYPE_EXPORT_IMAGE_DMA_BUF_INFO_MESAX"><type>VkStructureType</type> <name>sType</name></member>
@@ -6432,12 +6439,14 @@ private version is maintained in the 1.0 branch of the member gitlab server.
                 <enum offset="0" extends="VkStructureType"                     name="VK_STRUCTURE_TYPE_DMA_BUF_FORMAT_PROPERTIES_MESAX"/>
                 <enum offset="1" extends="VkStructureType"                     name="VK_STRUCTURE_TYPE_DMA_BUF_IMAGE_FORMAT_PROPERTIES_MESAX"/>
                 <enum offset="2" extends="VkStructureType"                     name="VK_STRUCTURE_TYPE_IMPORT_IMAGE_DMA_BUF_INFO_MESAX"/>
-                <enum offset="3" extends="VkStructureType"                     name="VK_STRUCTURE_TYPE_EXPORT_IMAGE_DMA_BUF_INFO_MESAX"/>
-                <enum offset="4" extends="VkStructureType"                     name="VK_STRUCTURE_TYPE_IMAGE_DMA_BUF_PROPERTIES_MESAX"/>
+                <enum offset="3" extends="VkStructureType"                     name="VK_STRUCTURE_TYPE_IMPORT_IMAGE_ASPECT_DMA_BUF_INFO_MESAX"/>
+                <enum offset="4" extends="VkStructureType"                     name="VK_STRUCTURE_TYPE_EXPORT_IMAGE_DMA_BUF_INFO_MESAX"/>
+                <enum offset="5" extends="VkStructureType"                     name="VK_STRUCTURE_TYPE_IMAGE_DMA_BUF_PROPERTIES_MESAX"/>
                 <type name="VkDmaBufFormatPropertiesMESAX"/>
                 <type name="VkDmaBufFormatModifierPropertiesMESAX"/>
                 <type name="VkDmaBufImageFormatPropertiesMESAX"/>
                 <type name="VkDmaBufImageFormatModifierPropertiesMESAX"/>
+                <type name="VkImportImageAspectDmaBufInfoMESAX"/>
                 <type name="VkImportImageDmaBufInfoMESAX"/>
                 <type name="VkExportImageDmaBufInfoMESAX"/>
                 <type name="VkImageDmaBufPropertiesMESAX"/>

@@ -308,8 +308,9 @@ typedef enum VkStructureType {
     VK_STRUCTURE_TYPE_DMA_BUF_FORMAT_PROPERTIES_MESAX = 1000126000,
     VK_STRUCTURE_TYPE_DMA_BUF_IMAGE_FORMAT_PROPERTIES_MESAX = 1000126001,
     VK_STRUCTURE_TYPE_IMPORT_IMAGE_DMA_BUF_INFO_MESAX = 1000126002,
-    VK_STRUCTURE_TYPE_EXPORT_IMAGE_DMA_BUF_INFO_MESAX = 1000126003,
-    VK_STRUCTURE_TYPE_IMAGE_DMA_BUF_PROPERTIES_MESAX = 1000126004,
+    VK_STRUCTURE_TYPE_IMPORT_IMAGE_ASPECT_DMA_BUF_INFO_MESAX = 1000126003,
+    VK_STRUCTURE_TYPE_EXPORT_IMAGE_DMA_BUF_INFO_MESAX = 1000126004,
+    VK_STRUCTURE_TYPE_IMAGE_DMA_BUF_PROPERTIES_MESAX = 1000126005,
     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES_EXT = 1000130000,
     VK_STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT = 1000130001,
     VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT = 1000148000,
@@ -6022,12 +6023,20 @@ typedef struct VkDmaBufImageFormatPropertiesMESAX {
     VkDmaBufImageFormatModifierPropertiesMESAX*    pModifierProperties;
 } VkDmaBufImageFormatPropertiesMESAX;
 
+typedef struct VkImportImageAspectDmaBufInfoMESAX {
+    VkStructureType          sType;
+    const void*              pNext;
+    VkImageAspectFlagBits    aspect;
+    VkDeviceSize             size;
+    VkDeviceSize             rowPitch;
+} VkImportImageAspectDmaBufInfoMESAX;
+
 typedef struct VkImportImageDmaBufInfoMESAX {
-    VkStructureType    sType;
-    const void*        pNext;
-    uint64_t           drmFormatModifier;
-    VkDeviceSize       size;
-    VkDeviceSize       rowPitch;
+    VkStructureType                              sType;
+    const void*                                  pNext;
+    uint64_t                                     drmFormatModifier;
+    uint32_t                                     aspectCount;
+    const VkImportImageAspectDmaBufInfoMESAX*    pAspects;
 } VkImportImageDmaBufInfoMESAX;
 
 typedef struct VkExportImageDmaBufInfoMESAX {
