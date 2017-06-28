@@ -2334,8 +2334,8 @@ private version is maintained in the 1.0 branch of the member gitlab server.
         <type category="struct" name="VkDmaBufFormatPropertiesMESAX">
             <member values="VK_STRUCTURE_TYPE_DMA_BUF_FORMAT_PROPERTIES_MESAX"><type>VkStructureType</type> <name>sType</name></member>
             <member noautovalidity="true"><type>void</type>* <name>pNext</name></member>
-            <member optional="true"><type>uint32_t</type> <name>modifierCount</name></member>
-            <member optional="true" len="modifierCount" noautovalidity="true"><type>VkDmaBufFormatModifierPropertiesMESAX</type>* <name>pModifierProperties</name></member>
+            <member optional="false,true"><type>uint32_t</type>* <name>pModifierCount</name></member>
+            <member optional="true" len="pModifierCount" noautovalidity="true"><type>VkDmaBufFormatModifierPropertiesMESAX</type>* <name>pModifierProperties</name></member>
         </type>
         <type category="struct" name="VkDmaBufImageFormatModifierPropertiesMESAX">
             <member><type>uint64_t</type> <name>drmFormatModifier</name></member>
@@ -2344,8 +2344,8 @@ private version is maintained in the 1.0 branch of the member gitlab server.
         <type category="struct" name="VkDmaBufImageFormatPropertiesMESAX">
             <member values="VK_STRUCTURE_TYPE_DMA_BUF_IMAGE_FORMAT_PROPERTIES_MESAX"><type>VkStructureType</type> <name>sType</name></member>
             <member noautovalidity="true"><type>void</type>* <name>pNext</name></member>
-            <member optional="true"><type>uint32_t</type> <name>modifierCount</name></member>
-            <member optional="true" len="modifierCount" noautovalidity="true"><type>VkDmaBufImageFormatModifierPropertiesMESAX</type>* <name>pModifierProperties</name></member>
+            <member optional="false,true"><type>uint32_t</type>* <name>pModifierCount</name></member>
+            <member optional="true" len="pModifierCount" noautovalidity="true"><type>VkDmaBufImageFormatModifierPropertiesMESAX</type>* <name>pModifierProperties</name></member>
         </type>
         <type category="struct" name="VkImportImageAspectDmaBufInfoMESAX">
             <member values="VK_STRUCTURE_TYPE_IMPORT_IMAGE_ASPECT_DMA_BUF_INFO_MESAX"><type>VkStructureType</type> <name>sType</name></member>

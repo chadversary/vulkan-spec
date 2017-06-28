@@ -6005,7 +6005,7 @@ typedef struct VkDmaBufFormatModifierPropertiesMESAX {
 typedef struct VkDmaBufFormatPropertiesMESAX {
     VkStructureType                           sType;
     void*                                     pNext;
-    uint32_t                                  modifierCount;
+    uint32_t*                                 pModifierCount;
     VkDmaBufFormatModifierPropertiesMESAX*    pModifierProperties;
 } VkDmaBufFormatPropertiesMESAX;
 
@@ -6017,7 +6017,7 @@ typedef struct VkDmaBufImageFormatModifierPropertiesMESAX {
 typedef struct VkDmaBufImageFormatPropertiesMESAX {
     VkStructureType                                sType;
     void*                                          pNext;
-    uint32_t                                       modifierCount;
+    uint32_t*                                      pModifierCount;
     VkDmaBufImageFormatModifierPropertiesMESAX*    pModifierProperties;
 } VkDmaBufImageFormatPropertiesMESAX;
 
