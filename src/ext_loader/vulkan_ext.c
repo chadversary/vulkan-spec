@@ -1585,6 +1585,21 @@ VkResult vkCreateMacOSSurfaceMVK(
 
 #endif /* VK_USE_PLATFORM_MACOS_MVK */
 #endif /* VK_MVK_macos_surface */
+#ifdef VK_EXT_get_physical_device_format_properties3
+static PFN_vkGetPhysicalDeviceFormatProperties3EXT pfn_vkGetPhysicalDeviceFormatProperties3EXT;
+VkResult vkGetPhysicalDeviceFormatProperties3EXT(
+    VkPhysicalDevice                            physicalDevice,
+    const VkPhysicalDeviceFormatInfo3EXT*       pFormatInfo,
+    VkFormatProperties2KHR*                     pFormatProperties)
+{
+    return pfn_vkGetPhysicalDeviceFormatProperties3EXT(
+        physicalDevice,
+        pFormatInfo,
+        pFormatProperties
+    );
+}
+
+#endif /* VK_EXT_get_physical_device_format_properties3 */
 
 void vkExtInitInstance(VkInstance instance)
 {
@@ -1798,6 +1813,9 @@ void vkExtInitInstance(VkInstance instance)
     pfn_vkCreateMacOSSurfaceMVK = (PFN_vkCreateMacOSSurfaceMVK)vkGetInstanceProcAddr(instance, "vkCreateMacOSSurfaceMVK");
 #endif /* VK_USE_PLATFORM_MACOS_MVK */
 #endif /* VK_MVK_macos_surface */
+#ifdef VK_EXT_get_physical_device_format_properties3
+    pfn_vkGetPhysicalDeviceFormatProperties3EXT = (PFN_vkGetPhysicalDeviceFormatProperties3EXT)vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceFormatProperties3EXT");
+#endif /* VK_EXT_get_physical_device_format_properties3 */
 }
 
 void vkExtInitDevice(VkDevice device)
@@ -2012,5 +2030,8 @@ void vkExtInitDevice(VkDevice device)
     pfn_vkCreateMacOSSurfaceMVK = (PFN_vkCreateMacOSSurfaceMVK)vkGetDeviceProcAddr(device, "vkCreateMacOSSurfaceMVK");
 #endif /* VK_USE_PLATFORM_MACOS_MVK */
 #endif /* VK_MVK_macos_surface */
+#ifdef VK_EXT_get_physical_device_format_properties3
+    pfn_vkGetPhysicalDeviceFormatProperties3EXT = (PFN_vkGetPhysicalDeviceFormatProperties3EXT)vkGetDeviceProcAddr(device, "vkGetPhysicalDeviceFormatProperties3EXT");
+#endif /* VK_EXT_get_physical_device_format_properties3 */
 }
 

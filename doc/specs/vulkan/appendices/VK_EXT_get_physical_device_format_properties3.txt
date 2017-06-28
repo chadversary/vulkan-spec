@@ -1,0 +1,62 @@
+// Copyright (c) 2016-2017 Khronos Group. This work is licensed under a
+// Creative Commons Attribution 4.0 International License; see
+// http://creativecommons.org/licenses/by/4.0/
+
+[[VK_EXT_get_physical_device_format_properties3]]
+== VK_EXT_get_physical_device_format_properties3
+
+*Name String*::
+    +VK_EXT_get_physical_device_format_properties3+
+*Extension Type*::
+    Instance extension
+*Registered Extension Number*::
+    159
+*Status*::
+    Draft
+*Last Modified Date*::
+    2017-06-28
+*Revision*::
+    1.0
+*IP Status*::
+    No known IP claims.
+*Dependencies*::
+  - This extension is written against version 1.0.51 of the Vulkan API.
+*Contributors*::
+  - Chad Versace, Google
+*Contacts*::
+  - Chad Versace <chadversary@google.com>
+
+The entry point flink:vkGetPhysicalDeviceFormatProperties2KHR has a single
+input parameter, pname:format.  This extension provides a new entry point,
+flink:vkGetPhysicalDeviceFormatProperties3EXT, that allows additional
+parameters to be provided through a ptext:pNext chain.
+
+=== New Object Types
+
+None.
+
+=== New Enum Constants
+
+  * Extending elink:VkStructureType:
+  ** ename:VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FORMAT_INFO_3_EXT
+
+=== New Enums
+
+None.
+
+=== New Structures
+
+  * slink:VkPhysicalDeviceFormatInfo3EXT
+
+=== New Functions
+
+  * flink:vkGetPhysicalDeviceFormatProperties3EXT
+
+=== Issues
+
+None.
+
+=== Version History
+
+ * Revision 1.1, 2017-06-28 (Chad Versace)
+   - Initial version

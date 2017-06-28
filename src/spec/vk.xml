@@ -2327,6 +2327,11 @@ private version is maintained in the 1.0 branch of the member gitlab server.
             <member><type>uint32_t</type>                                                                         <name>coverageModulationTableCount</name></member>
             <member noautovalidity="true" optional="true" len="coverageModulationTableCount">const <type>float</type>* <name>pCoverageModulationTable</name></member>
         </type>
+        <type category="struct" name="VkPhysicalDeviceFormatInfo3EXT">
+            <member values="VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FORMAT_INFO_3_EXT"><type>VkStructureType</type> <name>sType</name></member>
+            <member>const <type>void</type>* <name>pNext</name></member>
+            <member><type>VkFormat</type> <name>format</name></member>
+        </type>
     </types>
 
     <!-- SECTION: Vulkan enumerant (token) definitions. -->
@@ -4930,6 +4935,12 @@ private version is maintained in the 1.0 branch of the member gitlab server.
             <param optional="false,true"><type>uint32_t</type>* <name>pSurfaceFormatCount</name></param>
             <param optional="true" len="pSurfaceFormatCount"><type>VkSurfaceFormat2KHR</type>* <name>pSurfaceFormats</name></param>
         </command>
+        <command successcodes="VK_SUCCESS" errorcodes="VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY,VK_ERROR_FORMAT_NOT_SUPPORTED">
+            <proto><type>VkResult</type> <name>vkGetPhysicalDeviceFormatProperties3EXT</name></proto>
+            <param><type>VkPhysicalDevice</type> <name>physicalDevice</name></param>
+            <param>const <type>VkPhysicalDeviceFormatInfo3EXT</type>* <name>pFormatInfo</name></param>
+            <param><type>VkFormatProperties2KHR</type>* <name>pFormatProperties</name></param>
+        </command>
     </commands>
 
     <!-- SECTION: Vulkan API interface definitions -->
@@ -6635,10 +6646,13 @@ private version is maintained in the 1.0 branch of the member gitlab server.
                 <enum value="&quot;VK_KHR_extension_158&quot;"           name="VK_KHR_EXTENSION_158_EXTENSION_NAME"/>
             </require>
         </extension>
-        <extension name="VK_EXT_extension_159" number="159" author="EXT" contact="Chad Versace @chadversary" supported="disabled">
+        <extension name="VK_EXT_get_physical_device_format_properties3" number="159" type="instance" requires="VK_KHR_get_physical_device_properties2" author="EXT" contact="Chad Versace @chadversary" supported="vulkan">
             <require>
-                <enum value="0"                                          name="VK_EXT_EXTENSION_159_SPEC_VERSION"/>
-                <enum value="&quot;VK_EXT_extension_159&quot;"           name="VK_EXT_EXTENSION_159_EXTENSION_NAME"/>
+                <enum value="1" name="VK_EXT_GET_PHYSICAL_DEVICE_FORMAT_FEATURES_3_SPEC_VERSION"/>
+                <enum value="&quot;VK_EXT_get_physical_device_format_properties3&quot;" name="VK_EXT_GET_PHYSICAL_DEVICE_FORMAT_PROPERTIES_3_EXTENSION_NAME"/>
+                <enum offset="0" extends="VkStructureType" name="VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FORMAT_INFO_3_EXT"/>
+                <type name="VkPhysicalDeviceFormatInfo3EXT"/>
+                <command name="vkGetPhysicalDeviceFormatProperties3EXT"/>
             </require>
         </extension>
         <extension name="VK_EXT_extension_160" number="160" author="EXT" contact="Mark Young @MarkY_LunarG" supported="disabled">

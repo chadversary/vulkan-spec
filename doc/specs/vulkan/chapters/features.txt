@@ -3469,6 +3469,46 @@ include::../validity/structs/VkFormatProperties2KHR.txt[]
 
 endif::VK_KHR_get_physical_device_properties2[]
 
+ifdef::VK_EXT_get_physical_device_format_properties3[]
+[open,refpage='vkGetPhysicalDeviceFormatProperties3EXT',desc='Lists physical device\'s format capabilities',type='protos']
+--
+To query supported format features which are properties of the physical
+device, call:
+
+include::../api/protos/vkGetPhysicalDeviceFormatProperties3EXT.txt[]
+
+  * pname:physicalDevice is the physical device from which to query the
+    format properties.
+  * pname:pFormatInfo points to an instance of the
+    slink:VkPhysicalDeviceFormatInfo3EXT structure, which describes the format
+    whose properties are queried.
+  * pname:pFormatProperties is a pointer to a slink:VkFormatProperties2KHR
+    structure in which physical device properties for pname:format are
+    returned.
+
+flink:vkGetPhysicalDeviceFormatProperties3EXT behaves similarly to
+flink:vkGetPhysicalDeviceFormatProperties2KHR, with the ability to provide
+extended information in the pname:pNext chain of
+slink:VkPhysicalDeviceFormatInfo3EXT.
+
+include::../validity/protos/vkGetPhysicalDeviceFormatProperties3EXT.txt[]
+--
+
+[open,refpage='VkPhysicalDeviceFormatInfo3EXT',desc='Structure specifying queried format information',type='struct']
+--
+The slink:VkPhysicalDeviceFormatInfo3EXT structure is defined as:
+
+include::../api/structs/VkPhysicalDeviceFormatInfo3EXT.txt[]
+
+The members of slink:VkPhysicalDeviceFormatInfo3EXT correspond to the
+arguments to flink:vkGetPhysicalDeviceeFormatProperties2KHR, with
+pname:sType and pname:pNext added for extensibility.
+
+include::../validity/structs/VkPhysicalDeviceFormatInfo3EXT.txt[]
+--
+
+endif::VK_EXT_get_physical_device_format_properties3[]
+
 
 [[features-required-format-support]]
 === Required Format Support
