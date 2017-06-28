@@ -4167,6 +4167,46 @@ for the following external handle types:
 
 endif::VK_KHX_external_memory_capabilities[]
 
+ifdef::VK_MESAX_external_image_dma_buf[]
+// refBegin VkDmaBufImageFormatPropertiesMESAX TODO
+
+To determine the image capabilities compatible with
+<<glossry-drm-format-modifier,DRM format modifiers>>,
+
+  * add slink:VkPhysicalDeviceExternalImageFormatInfoKHX to the pname:pNext
+    chain of slink:VkPhysicalDeviceImageFormatInfo2KHR and add
+    slink:VkExternalImageFormatPropertiesKHX to the pname:pNext chain of
+    slink:VkImageFormatProperties2KHR, as described above;
+  * set slink:VkPhysicalDeviceExternalImageFormatInfoKHX::pname:handleType to
+    elink:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_MESAX;
+  * and add slink:VkDmaBufImageFormatPropertiesMESAX to the pname:pNext chain
+    of the slink:VkExternalImageFormatPropertiesKHX.
+
+The sname:VkDmaBufImageFormatPropertiesMESAX structure is defined as
+
+include::../api/structs/VkDmaBufImageFormatPropertiesMESAX.txt[]
+
+  * pname:sType is the type of this structure.
+  * pname:pNext is `NULL` or a pointer to an extension-specific structure.
+  * pname:pModifierCount is a pointer to an integer related to the number DRM
+    format modifiers available, as described below.
+  * pname:pModifierProperties is either `NULL` or a pointer to an array of
+    slink:VkDmaBufImageFormatModifierPropertiesMESAX structures.
+
+If pname:pModifierProperties is `NULL`, then the number of DRM format modifiers
+compatible with the image parameters specified in
+slink:VkPhysicalDeviceImageFormatInfo2KHR and its pname:pNext chain. Otherwise,
+pname:pModifierCount must: point to a variable set by the user to the number of
+elements in the pname:pModifierProperties array, and on return the variable is
+overwritten with the number of structures actually written to
+pname:pModifierProperties. If pname:pModifierCount is less than the number of
+available DRM format modifiers, then at most pname:pModifierCount structures
+will be written to the array.
+
+TODO: Specify VkDmaBufImageFormatModifierPropertiesMESAX.
+
+endif::VK_MESAX_external_image_dma_buf[]
+
 endif::VK_KHR_get_physical_device_properties2[]
 
 
