@@ -326,6 +326,12 @@ ifdef::VK_AMD_draw_indirect_count[]
 endif::VK_AMD_draw_indirect_count[]
     and flink:vkCmdDrawIndexedIndirect.
 
+ifdef:VK_MESAX_external_image_dma_buf[]
+[[glossary-drm-format-modifier]]
+DRM Format Modifier::
+    TODO(chadversary): Briefly define DRM Format Modifier. Link to drm_fourcc.h.
+endif:VK_MESAX_external_image_dma_buf[]
+
 Duration (Command)::
     The _duration_ of a Vulkan command refers to the interval between
     calling the command and its return to the caller.
