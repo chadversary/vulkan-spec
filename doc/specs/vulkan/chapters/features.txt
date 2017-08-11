@@ -5220,9 +5220,8 @@ If pname:handleType is 0, flink:vkGetPhysicalDeviceImageFormatProperties2KHR
 will behave as if slink:VkPhysicalDeviceExternalImageFormatInfoKHR was not
 present, and slink:VkExternalImageFormatPropertiesKHR will be ignored.
 
-If pname:handleType is not compatible with the pname:format, pname:type,
-pname:tiling, pname:usage, and pname:flags specified in
-slink:VkPhysicalDeviceImageFormatInfo2KHR, then
+If pname:handleType is not compatible with the parameters specified in
+slink:VkPhysicalDeviceImageFormatInfo2KHR and its pname:pNext chain, then
 flink:vkGetPhysicalDeviceImageFormatProperties2KHR returns
 ename:VK_ERROR_FORMAT_NOT_SUPPORTED.
 
@@ -5281,6 +5280,12 @@ include::../api/enums/VkExternalMemoryHandleTypeFlagBitsKHR.txt[]
     NT handle returned by code:ID3D12Device::code:CreateSharedHandle
     referring to a Direct3D 12 committed resource.
     It owns a reference to the memory used by the Direct3D resource.
+ifdef::VK_EXT_external_memory_dma_buf[]
+  * ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT is a file
+    descriptor for a Linux dma_buf.
+    It owns a reference to the underlying memory resource represented by
+    its Vulkan memory object.
+endif::VK_EXT_external_memory_dma_buf[]
 
 <<<
 
@@ -5299,7 +5304,24 @@ following table:
 | ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_KMT_BIT_KHR | Must match | Must match
 | ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP_BIT_KHR | Must match | Must match
 | ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT_KHR | Must match | Must match
+ifdef::VK_EXT_external_memory_dma_buf[]
+| ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT | No restriction | No restriction
+endif::VK_EXT_external_memory_dma_buf[]
 |====
+
+ifdef::VK_EXT_external_memory_dma_buf[]
+[NOTE]
+.Note
+====
+Even though the above table does not restrict the drivers and devices with
+which ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT may: be shared,
+query mechanisms exist in the Vulkan API that prevent the import of
+incompatible dma-bufs (such as flink:vkGetMemoryFdPropertiesKHR) and that prevent
+incompatible usage of dma-bufs (such
+slink:VkPhysicalDeviceExternalBufferInfoKHR and
+slink:VkPhysicalDeviceExternalImageFormatInfoKHR).
+====
+endif::VK_EXT_external_memory_dma_buf[]
 
 --
 

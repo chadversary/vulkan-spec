@@ -290,6 +290,10 @@ ifdef::VK_EXT_display_surface_counter[]
 include::VK_EXT_display_surface_counter.txt[]
 endif::VK_EXT_display_surface_counter[]
 
+ifdef::VK_EXT_external_memory_dma_buf[]
+include::VK_EXT_external_memory_dma_buf.txt[]
+endif::VK_EXT_external_memory_dma_buf[]
+
 ifdef::VK_EXT_global_priority[]
 include::VK_EXT_global_priority.txt[]
 endif::VK_EXT_global_priority[]

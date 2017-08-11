@@ -4195,6 +4195,7 @@ typedef enum VkExternalMemoryHandleTypeFlagBitsKHR {
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_KMT_BIT_KHR = 0x00000010,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP_BIT_KHR = 0x00000020,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT_KHR = 0x00000040,
+    VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT = 0x00000080,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAG_BITS_MAX_ENUM_KHR = 0x7FFFFFFF
 } VkExternalMemoryHandleTypeFlagBitsKHR;
 typedef VkFlags VkExternalMemoryHandleTypeFlagsKHR;
@@ -6615,6 +6616,11 @@ VKAPI_ATTR VkResult VKAPI_CALL vkCreateMacOSSurfaceMVK(
     VkSurfaceKHR*                               pSurface);
 #endif
 #endif /* VK_USE_PLATFORM_MACOS_MVK */
+
+#define VK_EXT_external_memory_dma_buf 1
+#define VK_EXT_EXTERNAL_MEMORY_DMA_BUF_SPEC_VERSION 1
+#define VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME "VK_EXT_external_memory_dma_buf"
+
 
 #define VK_EXT_sampler_filter_minmax 1
 #define VK_EXT_SAMPLER_FILTER_MINMAX_SPEC_VERSION 1
