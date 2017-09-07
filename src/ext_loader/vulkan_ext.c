@@ -1819,6 +1819,21 @@ void vkGetPhysicalDeviceMultisamplePropertiesEXT(
 }
 
 #endif /* VK_EXT_sample_locations */
+#ifdef VK_EXT_image_drm_format_modifier
+static PFN_vkGetImageDrmFormatModifierEXT pfn_vkGetImageDrmFormatModifierEXT;
+VkResult vkGetImageDrmFormatModifierEXT(
+    VkDevice                                    device,
+    VkImage                                     image,
+    uint64_t*                                   pDrmFormatModifier)
+{
+    return pfn_vkGetImageDrmFormatModifierEXT(
+        device,
+        image,
+        pDrmFormatModifier
+    );
+}
+
+#endif /* VK_EXT_image_drm_format_modifier */
 #ifdef VK_EXT_validation_cache
 static PFN_vkCreateValidationCacheEXT pfn_vkCreateValidationCacheEXT;
 VkResult vkCreateValidationCacheEXT(
@@ -2128,6 +2143,9 @@ void vkExtInitInstance(VkInstance instance)
     pfn_vkCmdSetSampleLocationsEXT = (PFN_vkCmdSetSampleLocationsEXT)vkGetInstanceProcAddr(instance, "vkCmdSetSampleLocationsEXT");
     pfn_vkGetPhysicalDeviceMultisamplePropertiesEXT = (PFN_vkGetPhysicalDeviceMultisamplePropertiesEXT)vkGetInstanceProcAddr(instance, "vkGetPhysicalDeviceMultisamplePropertiesEXT");
 #endif /* VK_EXT_sample_locations */
+#ifdef VK_EXT_image_drm_format_modifier
+    pfn_vkGetImageDrmFormatModifierEXT = (PFN_vkGetImageDrmFormatModifierEXT)vkGetInstanceProcAddr(instance, "vkGetImageDrmFormatModifierEXT");
+#endif /* VK_EXT_image_drm_format_modifier */
 #ifdef VK_EXT_validation_cache
     pfn_vkCreateValidationCacheEXT = (PFN_vkCreateValidationCacheEXT)vkGetInstanceProcAddr(instance, "vkCreateValidationCacheEXT");
     pfn_vkDestroyValidationCacheEXT = (PFN_vkDestroyValidationCacheEXT)vkGetInstanceProcAddr(instance, "vkDestroyValidationCacheEXT");
@@ -2384,6 +2402,9 @@ void vkExtInitDevice(VkDevice device)
     pfn_vkCmdSetSampleLocationsEXT = (PFN_vkCmdSetSampleLocationsEXT)vkGetDeviceProcAddr(device, "vkCmdSetSampleLocationsEXT");
     pfn_vkGetPhysicalDeviceMultisamplePropertiesEXT = (PFN_vkGetPhysicalDeviceMultisamplePropertiesEXT)vkGetDeviceProcAddr(device, "vkGetPhysicalDeviceMultisamplePropertiesEXT");
 #endif /* VK_EXT_sample_locations */
+#ifdef VK_EXT_image_drm_format_modifier
+    pfn_vkGetImageDrmFormatModifierEXT = (PFN_vkGetImageDrmFormatModifierEXT)vkGetDeviceProcAddr(device, "vkGetImageDrmFormatModifierEXT");
+#endif /* VK_EXT_image_drm_format_modifier */
 #ifdef VK_EXT_validation_cache
     pfn_vkCreateValidationCacheEXT = (PFN_vkCreateValidationCacheEXT)vkGetDeviceProcAddr(device, "vkCreateValidationCacheEXT");
     pfn_vkDestroyValidationCacheEXT = (PFN_vkDestroyValidationCacheEXT)vkGetDeviceProcAddr(device, "vkDestroyValidationCacheEXT");

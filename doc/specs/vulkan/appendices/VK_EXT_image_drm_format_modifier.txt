@@ -1,0 +1,128 @@
+// Copyright (c) 2016-2017 Khronos Group. This work is licensed under a
+// Creative Commons Attribution 4.0 International License; see
+// http://creativecommons.org/licenses/by/4.0/
+
+include::meta/VK_EXT_image_drm_format_modifier.txt[]
+
+*Last Modified Date*::
+    2017-11-07
+*IP Status*::
+    No known IP claims.
+*Contributors*::
+  - Antoine Labour, Google <piman@google.com>
+  - Chad Versace, Google <chadversary@google.com>
+  - James Jones <jajones@nvidia.com>
+  - Jason Ekstrand <jason.ekstrand@intel.com>
+  - Kristian Høgsberg Kristensen <hoegsberg@google.com>
+*Contact*::
+  - Chad Versace, Google <chadversary@google.com>
+
+=== TODO
+
+  * TODO(chadversary): Write overview.
+  * TODO(chadversary): Write exception for VK_QUEUE_FAMILY_FOREIGN_EXT.
+  * TODO(chadversary): Resolve interactions with VK_KHR_bind_memory2.
+  * TODO(chadversary): Update all VUs that interact with this extension.
+
+=== New Object Types
+
+None.
+
+=== New Enum Constants
+
+  * Extends elink:VkResult:
+  ** ename:VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT
+
+  * Extends elink:VkStructureType:
+  ** ename:VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT
+  ** ename:VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT
+  ** ename:VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_LIST_CREATE_INFO_EXT
+  ** ename:VK_STRUCTURE_TYPE_IMAGE_EXPLICIT_DRM_FORMAT_MODIFIER_CREATE_INFO_EXT
+
+  * Extends elink:VkImageTiling:
+  ** ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT
+
+=== New Structs
+
+  * Extends elink:VkFormatProperties2KHR:
+  ** slink:VkDrmFormatModifierPropertiesListEXT
+
+  * Element of slink:VkDrmFormatModifierPropertiesListEXT:
+  ** slink:VkDrmFormatModifierPropertiesEXT
+
+  * Extends slink:VkPhysicalDeviceImageFormatInfo2KHR:
+  ** slink:VkPhysicalDeviceImageDrmFormatModifierInfoEXT
+
+  * Extends slink:VkImageCreateInfo:
+  ** slink:VkImageDrmFormatModifierListCreateInfoEXT
+  ** slink:VkImageExplicitDrmFormatModifierCreateInfoEXT
+
+=== New Functions
+
+  * flink:vkGetImageDrmFormatModifierEXT
+
+=== Issues
+
+  * TODO(chadversary): For single-planar color images, do we require
+    VK_IMAGE_ASPECT_PLANE_0_BIT_KHR or VK_IMAGE_ASPECT_COLOR_BIT?
+
+==== References
+
+  * FIXME: Drop unneeded references after writing overview.
+  * link:https://https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import.txt[EGL_EXT_image_dma_buf_import]
+  * link:https://https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import_modifiers.txt[EGL_EXT_image_dma_buf_import_modifiers]
+  * link:https://https://www.khronos.org/registry/EGL/extensions/MESA/EGL_MESA_image_dma_buf_export.txt[EGL_MESA_image_dma_buf_export]
+  * link:https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/include/uapi/drm/drm_mode.h?id=refs/tags/v4.10#n392[struct drm_mode_fb_cmd2]
+  * link:https://cgit.freedesktop.org/mesa/mesa/tree/src/gbm/main/gbm.h?h=17.0[gbm.h]
+
+==== Version History
+
+  * TOOD: Squash messy revision history before publication.
+
+  * Revision 0.11, 2017-11-07 (Chad Versace)
+    - More polish.
+
+  * Revision 0.10, 2017-10-31 (Chad Versace)
+    - More polish.
+
+  * Revision 0.9, 2017-08-14 (Chad Versace)
+    - Rewrite, again.
+
+  * Revision 0.8, 2017-06-13 (Chad Versace)
+    - Fold VkImportImageDmaBufPlaneInfoEXT into VkImportImageDmaBufInfoEXT.
+    - Fold VkExportImageDmaBufPlaneInfoEXT into VkExportImageDmaBufInfoEXT.
+    - Drop requirement on non-existent extension <<VK_EXT_get_image_properties>>.
+    - Add function vkGetImageDmaBufPropertiesEXT.
+    - Update issue #1. Explain that support for planar dma_buf images will
+      require future extensions.
+    - Add issue #7, which discusses external images that have disjoint
+      metadata.
+
+  * Revision 0.7, 2017-03-06 (Chad Versace)
+    - Require +VK_EXT_get_image_properties+.
+    - Replace query fname:vkExportDmaBufImageEXT with
+      fname:vkGetImagePropertiesEXT and sname:VkImageDmaBufPropertiesEXT.
+    - Rename structs to clarify their usage.
+
+  * Revision 0.6, 2017-02-27 (Chad Versace)
+    - Add issue #6, should support for DRM format modifiers be moved to
+      a separate extensions.
+
+  * Revision 0.5, 2017-02-26 (Chad Versace)
+    - Add issue #5 regarding explicit plane size.
+
+  * Revision 0.4, 2017-02-22 (Chad Versace)
+    - Replace vendor prefix EXT with MESAX because this is an experimental
+      extension.
+    - Expand resolution to isse #1 with an example.
+
+  * Revision 0.3, 2016-12-08 (Chad Versace)
+    - Split into VK_EXT_external_memory_dma_buf and
+      VK_EXT_external_image_dma_buf.
+    - Add issue #3: What should this extension be named?
+
+  * Revision 0.2, 2016-12-08 (Chad Versace)
+     - Resolve issue #2. One DRM format modifier exists per VkImage.
+
+  * Revision 0.1, 2012-12-02 (Chad Versace)
+    - Initial draft

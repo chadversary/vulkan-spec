@@ -298,6 +298,10 @@ ifdef::VK_EXT_hdr_metadata[]
 include::VK_EXT_hdr_metadata.txt[]
 endif::VK_EXT_hdr_metadata[]
 
+ifdef::VK_EXT_image_drm_format_modifier[]
+include::VK_EXT_image_drm_format_modifier.txt[]
+endif::VK_EXT_image_drm_format_modifier[]
+
 ifdef::VK_EXT_post_depth_coverage[]
 include::VK_EXT_post_depth_coverage.txt[]
 endif::VK_EXT_post_depth_coverage[]
