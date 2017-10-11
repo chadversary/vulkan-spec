@@ -3886,8 +3886,11 @@ specified explicitly when releasing ownership, nor is the source instance or
 API specified when acquiring ownership.
 Instead, the image or memory barrier's pname:dstQueueFamilyIndex or
 pname:srcQueueFamilyIndex parameters are set to the reserved queue family
-index ename:VK_QUEUE_FAMILY_EXTERNAL_KHR to represent the external
-destination or source respectively.
+index ename:VK_QUEUE_FAMILY_EXTERNAL_KHR
+ifdef::VK_EXT_queue_family_foreign[]
+or ename:VK_QUEUE_FAMILY_FOREIGN_EXT
+endif::VK_EXT_queue_family_foreign[]
+to represent the external destination or source respectively.
 
 Upon creation, memory objects shared between multiple Vulkan instances or
 other APIs are not owned by any instance or API.
