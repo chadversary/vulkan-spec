@@ -677,10 +677,30 @@ Invocation Group::
 
 [[glossary-linear-resource]]
 Linear Resource::
-    A resource is _linear_ if it is a slink:VkBuffer, or a slink:VkImage
-    created with ename:VK_IMAGE_TILING_LINEAR.
-    A resource is _non-linear_ if it is a slink:VkImage created with
-    ename:VK_IMAGE_TILING_OPTIMAL.
+    A resource is _linear_ if it is one of the following:
+        * a slink:VkBuffer;
+        * a slink:VkImage created with ename:VK_IMAGE_TILING_LINEAR.
+ifdef:VK_EXT_image_drm_format_modifier[]
+        * a slink:VkImage created with
+          ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT and with the
+          <<glossary-linux-drm-format-modifier>> ename:DRM_FORMAT_MOD_LINEAR.
+endif:VK_EXT_image_drm_format_modifier[]
++
+    A resource is _non-linear_ if it is one of the following:
+        * a slink:VkImage created with ename:VK_IMAGE_TILING_OPTIMAL.
+ifdef:VK_EXT_image_drm_format_modifier[]
+        * a slink:VkImage created with
+          ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT and any
+          <<glossary-linux-drm-format-modifier>> other than
+          ename:DRM_FORMAT_MOD_LINEAR.
+
+ifdef:VK_EXT_image_drm_format_modifier[]
+[[glossary-linux-drm-format-modifier]]
+Linux DRM Format Modifier::
+    TODO(chadversary): Briefly define DRM format modifiers. Link to
+    drm_fourcc.h as the canonical reference. Explain that each modifier has
+    a vendor.
+endif:VK_EXT_image_drm_format_modifier[]
 
 Local Workgroup::
     A collection of compute shader invocations invoked by a single dispatch

@@ -559,8 +559,11 @@ listed above.
 To query an implementation's specific capabilities for a given combination
 of pname:format, pname:imageType, pname:tiling, pname:usage,
 ifdef::VK_KHR_external_memory_capabilities[]
-slink:VkExternalMemoryImageCreateInfoKHR::pname:handleTypes
+slink:VkExternalMemoryImageCreateInfoKHR::pname:handleTypes,
 endif::VK_KHR_external_memory_capabilities[]
+ifdef::VK_EXT_image_drm_format_modifier[]
+<<glossary-linux-drm-format-modifier>>,
+endif::VK_EXT_image_drm_format_modifier[]
 and pname:flags, call
 ifdef::VK_KHR_get_physical_device_properties2[]
 flink:vkGetPhysicalDeviceImageFormatProperties2KHR.
@@ -862,6 +865,85 @@ endif::VK_KHR_maintenance1[]
     pname:format) does not include
     ename:VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT, pname:usage must:
     not contain ename:VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
+ifdef::VK_EXT_image_drm_format_modifier[]
+  // begin: VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT + VkImageDrmFormatModifierListCreateInfoEXT
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageDrmFormatModifierListCreateInfoEXT,
+    then, for each *modifier* in slink:VkImageDrmFormatModifierListCreateInfoEXT::pname:pDrmFormatModifiers,
+    the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and *modifier*,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain at least one bit.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageDrmFormatModifierListCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_USAGE_SAMPLED_BIT,
+    then, for each *modifier* in slink:VkImageDrmFormatModifierListCreateInfoEXT::pname:pDrmFormatModifiers,
+    the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and *modifier*,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageDrmFormatModifierListCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_USAGE_STORAGE_BIT,
+    then, for each *modifier* in slink:VkImageDrmFormatModifierListCreateInfoEXT::pname:pDrmFormatModifiers,
+    the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and *modifier*,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageDrmFormatModifierListCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+    then, for each *modifier* in slink:VkImageDrmFormatModifierListCreateInfoEXT::pname:pDrmFormatModifiers,
+    the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and *modifier*,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageDrmFormatModifierListCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+    then, for each *modifier* in slink:VkImageDrmFormatModifierListCreateInfoEXT::pname:pDrmFormatModifiers,
+    the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and *modifier*,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT.
+  // end: VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT + VkImageDrmFormatModifierListCreateInfoEXT
+  // begin: VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT + VkImageExplicitDrmFormatModifierCreateInfoEXT
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageExplicitDrmFormatModifierCreateInfoEXT,
+    then the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and slink:VkImageExplicitDrmFormatModifierCreateInfoEXT::pname:drmFormatModifier,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain at least one bit.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageExplicitDrmFormatModifierCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_USAGE_SAMPLED_BIT,
+    then the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and slink:VkImageExplicitDrmFormatModifierCreateInfoEXT::pname:drmFormatModifier,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageExplicitDrmFormatModifierCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_USAGE_STORAGE_BIT,
+    then the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and slink:VkImageExplicitDrmFormatModifierCreateInfoEXT::pname:drmFormatModifier,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageExplicitDrmFormatModifierCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+    then the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and slink:VkImageExplicitDrmFormatModifierCreateInfoEXT::pname:drmFormatModifier,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageExplicitDrmFormatModifierCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+    then the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and slink:VkImageExplicitDrmFormatModifierCreateInfoEXT::pname:drmFormatModifier,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT.
+  // end: VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT + VkImageExplicitDrmFormatModifierCreateInfoEXT
+endif::VK_EXT_image_drm_format_modifier[]
   * [[VUID-VkImageCreateInfo-flags-00987]]
     If pname:flags contains ename:VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT or
     ename:VK_IMAGE_CREATE_SPARSE_ALIASED_BIT, it must: also contain
@@ -956,11 +1038,38 @@ ifdef::VK_KHR_sampler_ycbcr_conversion[]
     fname:vkGetPhysicalDeviceFormatProperties with the same value of
     pname:format) does not include ename:VK_FORMAT_FEATURE_DISJOINT_BIT_KHR,
     pname:flags must: not contain ename:VK_IMAGE_CREATE_DISJOINT_BIT_KHR
+ifdef::VK_EXT_image_drm_format_modifier[]
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageDrmFormatModifierListCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_CREATE_DISJOINT_BIT_KHR,
+    then, for each *modifier* in slink:VkImageDrmFormatModifierListCreateInfoEXT::pname:pDrmFormatModifiers,
+    the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and *modifier*,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_DISJOINT_BIT_KHR.
+  * If pname:tiling is ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+    and the pname:pNext chain contains slink:VkImageExplicitDrmFormatModifierCreateInfoEXT,
+    and pname:usage contains ename:VK_IMAGE_CREATE_DISJOINT_BIT_KHR,
+    then the value of slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierTilingFeatures
+    associated with pname:format and slink:VkImageExplicitDrmFormatModifierCreateInfoEXT::pname:drmFormatModifier,
+    as returned by flink:vkGetPhysicalDeviceFormatProperties2KHR,
+    must: contain ename:VK_FORMAT_FEATURE_DISJOINT_BIT_KHR.
+endif::VK_EXT_image_drm_format_modifier[]
   * [[VUID-VkImageCreateInfo-format-01577]]
     If pname:format is not a _multi-planar_ format, and pname:flags does not
     include ename:VK_IMAGE_CREATE_ALIAS_BIT_KHR, pname:flags must: not
     contain ename:VK_IMAGE_CREATE_DISJOINT_BIT_KHR
 endif::VK_KHR_sampler_ycbcr_conversion[]
+ifdef::VK_EXT_image_drm_format_modifier[]
+  * The pname:pNext chain must: not contain both
+    slink:VkImageDrmFormatModifierListCreateInfoEXT and
+    slink:VkImageExplicitDrmFormatModifierCreateInfoEXT.
+  * pname:tiling must: be
+    ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT if and only if the
+    pname:pNext chain contains either
+    slink:VkImageDrmFormatModifierListCreateInfoEXT or
+    slink:VkImageExplicitDrmFormatModifierCreateInfoEXT.
+endif::VK_EXT_image_drm_format_modifier[]
 ifdef::VK_EXT_sample_locations[]
   * [[VUID-VkImageCreateInfo-flags-01533]]
     If pname:flags contains
@@ -1136,6 +1245,90 @@ include::../validity/structs/VkImageFormatListCreateInfoKHR.txt[]
 
 endif::VK_KHR_image_format_list[]
 
+ifdef::VK_EXT_image_drm_format_modifier[]
+[open,refpage='VkImageDrmFormatModifierListCreateInfoEXT',desc='Specify that an image must be created with a DRM format modifier from the provided list',type='structs']
+--
+If the pname:pNext chain of slink:VkImageCreateInfo contains
+slink:VkImageDrmFormatModifierListCreateInfoEXT, then the image will
+be created with one of the <<glossary-linux-drm-format-modifier>>s
+listed in the structure. The choice of modifier is implementation-dependent.
+
+The slink:VkImageDrmFormatModifierListCreateInfoEXT structure is defined as:
+
+include::../api/structs/VkImageDrmFormatModifierListCreateInfoEXT.txt[]
+
+  * pname:sType is the type of this structure.
+  * pname:pNext is `NULL` or a pointer to an extension-specific structure.
+  * pname:drmFormatModifierCount is the length of the
+    pname:pDrmFormatModifiers array.
+  * pname:pDrmFormatModifiers is an array of
+    <<glossary-linux-drm-format-modifier>>s.
+
+.Valid Usage
+****
+  * pname:drmFormatModifierCount must: not be 0.
+  * Each modifier in pname:pDrmFormatModifiers must be compatible with
+    the parameters in slink:VkImageCreateInfo and its name:pNext chain,
+    as reported by querying slink:VkPhysicalDeviceImageFormatInfo2KHR
+    extended with slink:VkPhysicalDeviceDrmFormatModifierImageInfoEXT.
+****
+
+include::../validity/structs/VkImageDrmFormatModifierListCreateInfoEXT.txt[]
+--
+
+[open,refpage='VkImageExplicitDrmFormatModifierCreateInfoEXT',desc='Specify that an image be created with the provided DRM format modifier and explicit memory layout',type='structs']
+--
+If the pname:pNext chain of slink:VkImageCreateInfo contains
+slink:VkImageExplicitDrmFormatModifierCreateInfoEXT, then the image will
+be created with the <<glossary-linux-drm-format-modifier>> and memory
+layout defined by the structure.
+
+The slink:VkImageExplicitDrmFormatModifierCreateInfoEXT structure is defined as:
+
+include::../api/structs/VkImageExplicitDrmFormatModifierCreateInfoEXT.txt[]
+
+  * pname:sType is the type of this structure.
+  * pname:pNext is `NULL` or a pointer to an extension-specific structure.
+  * pname:drmFormatModifier is the <<glossary-linux-drm-format-modifer>>
+    with which the image will be created.
+  * pname:planeCount is the number of planes in the image as well as the length
+    of the pname:pPlaneLayouts array.
+  * pname:pPlaneLayouts is an array of slink:VkSubresourceLayout structures
+    that define the memory layout of image's planes.
+
+When creating an image with
+slink:VkImageExplicitDrmFormatModifierCreateInfoEXT,
+it is the application's responsibility to satisfy all +Valid Usage+ requirements.
+However, the implementation must: validate that the provided pname:pPlaneLayouts,
+when combined with the provided pname:drmFormatModifier and other
+creation parameters in slink:VkImageCreateInfo and its pname:pNext chain,
+produce a valid image. (This validation is necessarily implementation-dependent
+and outside the scope of Vulkan, and therefore described by no +Valid Usage+ requirements).
+If this validation fails, then flink:vkCreateImage returns
+ename:VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT.
+
+.Valid Usage
+****
+  * pname:drmFormatModifier must be compatible with
+    the parameters in slink:VkImageCreateInfo and its name:pNext chain,
+    as reported by querying slink:VkPhysicalDeviceImageFormatInfo2KHR
+    extended with slink:VkPhysicalDeviceDrmFormatModifierImageInfoEXT.
+  * pname:planeCount must: be equal to the
+    slink:VkDrmFormatModifierPropertiesEXT::pname:drmFormatModifierPlaneCount
+    associated with pname:format and pname:drmFormatModifier, as reported by
+    querying flink:vkGetPhysicalDeviceFormatProperties2KHR.
+  * For each element of pname:pPlaneLayouts, pname:size must: not be 0.
+  * For each element of pname:pPlaneLayouts, if pname:arrayPitch is 0 then pname:arrayLength must: be 1.
+  * For each element of pname:pPlaneLayouts, if pname:depthPitch is 0 then pname:depth must: be 1.
+  * For each element of pname:pPlaneLayouts, the element must: satisfy the
+    constraints, if any, defined by external vendor documentation for the given
+    DRM format modifier and plane.
+****
+
+include::../validity/structs/VkImageExplicitDrmFormatModifierCreateInfoEXT.txt[]
+--
+endif::VK_EXT_image_drm_format_modifier[]
+
 [open,refpage='VkImageUsageFlagBits',desc='Bitmask specifying intended usage of an image',type='enums']
 --
 
@@ -1308,14 +1501,18 @@ include::../api/enums/VkImageTiling.txt[]
   * ename:VK_IMAGE_TILING_LINEAR specifies linear tiling (texels are laid
     out in memory in row-major order, possibly with some padding on each
     row).
-
+ifdef:VK_EXT_image_drm_format_modifier[]
+  * ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT, which indicates that
+    the image's tiling is specified by either
+    slink:VkImageDrmFormatModifierListCreateInfoEXT or
+    slink:VkImageExplicitDrmFormatModifierCreateInfoEXT.
+endif:VK_EXT_image_drm_format_modifier[]
 --
 
 [open,refpage='vkGetImageSubresourceLayout',desc='Retrieve information about an image subresource',type='protos']
 --
 
-To query the host access layout of an image subresource, for an image
-created with linear tiling, call:
+To query the memory layout of an image subresource, call:
 
 include::../api/protos/vkGetImageSubresourceLayout.txt[]
 
@@ -1325,6 +1522,23 @@ include::../api/protos/vkGetImageSubresourceLayout.txt[]
     selecting a specific image for the image subresource.
   * pname:pLayout points to a slink:VkSubresourceLayout structure in which
     the layout is returned.
+
+ifndef::VK_EXT_image_drm_format_modifier
+The image must: be <<glossary-linear-resource,linear>>.  The
+endif::VK_EXT_image_drm_format_modifier
+ifdef::VK_EXT_image_drm_format_modifier
+If the image is <<glossary-linear-resource,linear>>, then the
+endif::VK_EXT_image_drm_format_modifier
+returned layout is valid for <<memory-device-hostacces, host access>>.
+
+ifdef::VK_EXT_image_drm_format_modifier
+If the image is <<glossary-linear-resource,non-linear>> and has pname:tiling
+equal to ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT, then the
+returned layout has an implementation-dependent meaning and may: not be not valid for
+<<memory-device-hostacces, host access>>. The vendor of the image's
+<<glossary-linux-drm-format-modifier>> should: provide documentation on how to
+use the returned layout.
+endif::VK_EXT_image_drm_format_modifier
 
 ifdef::VK_KHR_sampler_ycbcr_conversion[]
 If the elink:VkFormat of pname:image is a
@@ -1337,9 +1551,15 @@ image.
 
 .Valid Usage
 ****
+ifndef::VK_EXT_image_drm_format_modifier[]
   * [[VUID-vkGetImageSubresourceLayout-image-00996]]
     pname:image must: have been created with pname:tiling equal to
     ename:VK_IMAGE_TILING_LINEAR
+endif::VK_EXT_image_drm_format_modifier[]
+ifdef::VK_EXT_image_drm_format_modifier[]
+  * pname:image must: have been created with pname:tiling equal to
+    ename:VK_IMAGE_TILING_LINEAR or ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT
+endif::VK_EXT_image_drm_format_modifier[]
   * [[VUID-vkGetImageSubresourceLayout-aspectMask-00997]]
     The pname:aspectMask member of pname:pSubresource must: only have a
     single bit set
@@ -1406,7 +1626,8 @@ include::../api/structs/VkSubresourceLayout.txt[]
   * pname:depthPitch describes the number of bytes between each slice of 3D
     image.
 
-For images created with linear tiling, pname:rowPitch, pname:arrayPitch and
+If the image is <<glossary-linear-resource,linear>>,
+then pname:rowPitch, pname:arrayPitch and
 pname:depthPitch describe the layout of the image subresource in linear
 memory.
 For uncompressed formats, pname:rowPitch is the number of bytes between
@@ -1470,6 +1691,27 @@ endif::VK_KHR_sampler_ycbcr_conversion[]
 
 include::../validity/structs/VkSubresourceLayout.txt[]
 --
+
+ifdef::VK_EXT_image_drm_format_modifier[]
+[open,refpage='vkGetImageDrmFormatModifierEXT',desc='Returns an image's DRM format modifier',type='protos']
+--
+To query the <<glossary-linux-drm-format-modifier>> of an image, call:
+
+include::../api/protos/vkGetImageDrmFormatModifierEXT.txt[]
+
+  * pname:device is the logical device that owns the image.
+  * pname:image is the queried image.
+  * pname:pDrmFormatModifier will return the image's DRM format modifier.
+
+.Valid Usage
+****
+  * pname:image must: have been created with pname:tiling equal to
+    ename:VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT.
+****
+
+include::../validity/protos/vkGetImageDrmFormatModifierEXT.txt[]
+--
+endif::VK_EXT_image_drm_format_modifier[]
 
 [open,refpage='vkDestroyImage',desc='Destroy an image object',type='protos']
 --
