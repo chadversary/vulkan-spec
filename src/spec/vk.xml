@@ -2666,6 +2666,7 @@ private version is maintained in the 1.0 branch of the member gitlab server.
         <enum value="1"     name="VK_TRUE"/>
         <enum value="0"     name="VK_FALSE"/>
         <enum value="(~0U)" name="VK_QUEUE_FAMILY_IGNORED"/>
+        <enum value="(~0U-2)" name="VK_QUEUE_FAMILY_FOREIGN_EXT"/>
         <enum value="(~0U-1)" name="VK_QUEUE_FAMILY_EXTERNAL_KHR"/>
         <enum value="(~0U)" name="VK_SUBPASS_EXTERNAL"/>
         <enum value="32"    name="VK_MAX_DEVICE_GROUP_SIZE_KHX"/>
@@ -6947,10 +6948,11 @@ private version is maintained in the 1.0 branch of the member gitlab server.
                 <enum bitpos="7" extends="VkExternalMemoryHandleTypeFlagBitsKHR" name="VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT"/>
             </require>
         </extension>
-        <extension name="VK_MESA_extension_127" number="127" author="MESA" contact="Chad Versace @chadversary" supported="disabled">
+        <extension name="VK_EXT_queue_family_foreign" number="127" type="device" author="EXT" requires="VK_KHR_external_memory" contact="Chad Versace @chadversary" supported="vulkan">
             <require>
-                <enum value="0"                                         name="VK_MESA_EXTENSION_127_SPEC_VERSION"/>
-                <enum value="&quot;VK_MESA_extension_127&quot;"         name="VK_MESA_EXTENSION_127_EXTENSION_NAME"/>
+                <enum value="1"                                         name="VK_EXT_QUEUE_FAMILY_FOREIGN_SPEC_VERSION"/>
+                <enum value="&quot;VK_EXT_queue_family_foreign&quot;"   name="VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME"/>
+                <enum                                                   name="VK_QUEUE_FAMILY_FOREIGN_EXT"/>
             </require>
         </extension>
         <extension name="VK_KHR_dedicated_allocation" number="128" type="device" author="KHR" requires="VK_KHR_get_memory_requirements2" contact="James Jones @cubanismo" supported="vulkan">
