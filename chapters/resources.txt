@@ -4784,7 +4784,8 @@ of an application, if some large resources are used for disjoint periods of
 time.
 ====
 
-When an opaque, non-ename:VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT image is
+When an <<glossary-linear-resource,non-linear>>,
+non-ename:VK_IMAGE_CREATE_SPARSE_RESIDENCY_BIT image is
 bound to an aliased range, all image subresources of the image _overlap_ the
 range.
 When a linear image is bound to an aliased range, the image subresources
