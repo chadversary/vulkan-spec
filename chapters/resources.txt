@@ -1644,8 +1644,11 @@ sname:VkSubresourceLayout structure:
 
 include::../api/structs/VkSubresourceLayout.txt[]
 
-  * pname:offset is the byte offset from the start of the image where the
-    image subresource begins.
+  * pname:offset is the byte offset from the start of the image
+ifdef::VK_VERSION_1_1,VK_KHR_sampler_ycbcr_conversion[]
+    or the plane
+endif::VK_VERSION_1_1,VK_KHR_sampler_ycbcr_conversion[]
+    where the image subresource begins.
   * pname:size is the size in bytes of the image subresource.
     pname:size includes any extra memory that is required based on
     pname:rowPitch.
@@ -1715,6 +1718,10 @@ ename:VK_IMAGE_ASPECT_PLANE_0_BIT, ename:VK_IMAGE_ASPECT_PLANE_1_BIT, or
 Querying each of these image subresource layouts will return a different
 pname:offset and pname:size representing the region of memory used for that
 plane.
+If the image is _disjoint_,
+then the pname:offset is relative to the base address of the plane.
+If the image is _non-disjoint_,
+then the pname:offset is relative to the base address of the image.
 endif::VK_VERSION_1_1,VK_KHR_sampler_ycbcr_conversion[]
 
 include::../validity/structs/VkSubresourceLayout.txt[]
