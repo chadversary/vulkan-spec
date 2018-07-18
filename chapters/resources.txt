@@ -2459,13 +2459,6 @@ ifdef::VK_VERSION_1_1,VK_KHR_maintenance1[]
     must: not be ename:VK_IMAGE_VIEW_TYPE_2D or
     ename:VK_IMAGE_VIEW_TYPE_2D_ARRAY
 endif::VK_VERSION_1_1,VK_KHR_maintenance1[]
-  * [[VUID-VkImageViewCreateInfo-image-01006]]
-    If pname:image was created with ename:VK_IMAGE_TILING_LINEAR,
-    pname:format must: be format that has at least one supported feature bit
-    present in the value of
-    sname:VkFormatProperties::pname:linearTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
 ifndef::VK_NV_shading_rate_image[]
   * [[VUID-VkImageViewCreateInfo-image-01007]]
     pname:image must: have been created with a pname:usage value containing
@@ -2485,124 +2478,21 @@ ifdef::VK_NV_shading_rate_image[]
     ename:VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT, or
     ename:VK_IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV
 endif::VK_NV_shading_rate_image[]
-  * [[VUID-VkImageViewCreateInfo-image-01008]]
-    If pname:image was created with ename:VK_IMAGE_TILING_LINEAR and
-    pname:usage contains ename:VK_IMAGE_USAGE_SAMPLED_BIT, pname:format
-    must: be supported for sampled images, as specified by the
-    ename:VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT flag in
-    sname:VkFormatProperties::pname:linearTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01009]]
-    If pname:image was created with ename:VK_IMAGE_TILING_LINEAR and
-    pname:usage contains ename:VK_IMAGE_USAGE_STORAGE_BIT, pname:format
-    must: be supported for storage images, as specified by the
-    ename:VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT flag in
-    sname:VkFormatProperties::pname:linearTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01010]]
-    If pname:image was created with ename:VK_IMAGE_TILING_LINEAR and
-    pname:usage contains ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-    pname:format must: be supported for color attachments, as specified by
-    the ename:VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT flag in
-    sname:VkFormatProperties::pname:linearTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01011]]
-    If pname:image was created with ename:VK_IMAGE_TILING_LINEAR and
-    pname:usage contains ename:VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-    pname:format must: be supported for depth/stencil attachments, as
-    specified by the ename:VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-    flag in sname:VkFormatProperties::pname:linearTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-ifndef::VK_ANDROID_external_memory_android_hardware_buffer[]
-  * [[VUID-VkImageViewCreateInfo-image-01012]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL,
-    pname:format must: be format that has at least one supported feature bit
-    present in the value of
-    sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01013]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL and
-    pname:usage contains ename:VK_IMAGE_USAGE_SAMPLED_BIT, pname:format
-    must: be supported for sampled images, as specified by the
-    ename:VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT flag in
-    sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01014]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL and
-    pname:usage contains ename:VK_IMAGE_USAGE_STORAGE_BIT, pname:format
-    must: be supported for storage images, as specified by the
-    ename:VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT flag in
-    sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01015]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL and
-    pname:usage contains ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-    pname:format must: be supported for color attachments, as specified by
-    the ename:VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT flag in
-    sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01016]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL and
-    pname:usage contains ename:VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-    pname:format must: be supported for depth/stencil attachments, as
-    specified by the ename:VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-    flag in sname:VkFormatProperties::pname:optimalTilingFeatures returned
-    by fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-endif::VK_ANDROID_external_memory_android_hardware_buffer[]
-ifdef::VK_ANDROID_external_memory_android_hardware_buffer[]
-  * [[VUID-VkImageViewCreateInfo-image-01965]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL and
-    pname:format is not ename:VK_FORMAT_UNDEFINED, pname:format must: be
-    format that has at least one supported feature bit present in the value
-    of sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01966]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL, and
-    pname:format is not ename:VK_FORMAT_UNDEFINED, and pname:usage contains
-    ename:VK_IMAGE_USAGE_SAMPLED_BIT, pname:format must: be supported for
-    sampled images, as specified by the
-    ename:VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT flag in
-    sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01967]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL, and
-    pname:format is not ename:VK_FORMAT_UNDEFINED, and pname:usage contains
-    ename:VK_IMAGE_USAGE_STORAGE_BIT, pname:format must: be supported for
-    storage images, as specified by the
-    ename:VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT flag in
-    sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01968]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL, and
-    pname:format is not ename:VK_FORMAT_UNDEFINED, and pname:usage contains
-    ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, pname:format must: be
-    supported for color attachments, as specified by the
-    ename:VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT flag in
-    sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-  * [[VUID-VkImageViewCreateInfo-image-01969]]
-    If pname:image was created with ename:VK_IMAGE_TILING_OPTIMAL, and
-    pname:format is not ename:VK_FORMAT_UNDEFINED, and pname:usage contains
-    ename:VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, pname:format must: be
-    supported for depth/stencil attachments, as specified by the
-    ename:VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT flag in
-    sname:VkFormatProperties::pname:optimalTilingFeatures returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format
-endif::VK_ANDROID_external_memory_android_hardware_buffer[]
+  * The <<resources-image-view-format-features,format features>>
+    of the resultant image view must: contain at least one bit.
+  * If pname:usage contains ename:VK_IMAGE_USAGE_SAMPLED_BIT,
+    then the <<resources-image-view-format-features,format features>>
+    of the resultant image view
+    must: contain ename:VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT.
+  * If pname:usage contains ename:VK_IMAGE_USAGE_STORAGE_BIT,
+    then the image view's <<resources-image-view-format-features,format features>>
+    must: contain ename:VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT.
+  * If pname:usage contains ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+    then the image view's <<resources-image-view-format-features,format features>>
+    must: contain ename:VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT.
+  * If pname:usage contains ename:VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+    then the image view's <<resources-image-view-format-features,format features>>
+    must: contain ename:VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT.
   * [[VUID-VkImageViewCreateInfo-subresourceRange-01478]]
     pname:subresourceRange.baseMipLevel must: be less than the
     pname:mipLevels specified in slink:VkImageCreateInfo when pname:image
