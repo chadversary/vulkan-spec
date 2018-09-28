@@ -608,37 +608,14 @@ supported unless other parameters meet all of the constraints:
 Implementations may: support additional limits and capabilities beyond those
 listed above.
 
-To query an implementation's specific capabilities for a given combination
-of pname:format, pname:imageType, pname:tiling, pname:usage,
-ifdef::VK_VERSION_1_1,VK_KHR_external_memory_capabilities[]
-slink:VkExternalMemoryImageCreateInfo::pname:handleTypes
-endif::VK_VERSION_1_1,VK_KHR_external_memory_capabilities[]
-and pname:flags, call
-ifdef::VK_VERSION_1_1,VK_KHR_get_physical_device_properties2[]
-flink:vkGetPhysicalDeviceImageFormatProperties2.
-endif::VK_VERSION_1_1,VK_KHR_get_physical_device_properties2[]
-ifndef::VK_VERSION_1_1,VK_KHR_get_physical_device_properties2[]
-flink:vkGetPhysicalDeviceImageFormatProperties.
-endif::VK_VERSION_1_1,VK_KHR_get_physical_device_properties2[]
-The return value specifies whether that combination of image settings is
-supported.
-On success, the sname:VkImageFormatProperties output parameter specifies the
-set of valid pname:samples bits and the limits for pname:extent,
-pname:mipLevels, pname:arrayLayers, and pname:maxResourceSize.
-Even if
-ifdef::VK_VERSION_1_1,VK_KHR_get_physical_device_properties2[]
-flink:vkGetPhysicalDeviceImageFormatProperties2.
-endif::VK_VERSION_1_1,VK_KHR_get_physical_device_properties2[]
-ifndef::VK_VERSION_1_1,VK_KHR_get_physical_device_properties2[]
-flink:vkGetPhysicalDeviceImageFormatProperties.
-endif::VK_VERSION_1_1,VK_KHR_get_physical_device_properties2[]
-returns success and the parameters to fname:vkCreateImage are all within the
-returned limits, fname:vkCreateImage must: fail and return
-ename:VK_ERROR_OUT_OF_DEVICE_MEMORY if the resulting size of the image would
-be larger than pname:maxResourceSize.
-
 To determine the set of valid pname:usage bits for a given format, call
 flink:vkGetPhysicalDeviceFormatProperties.
+
+If the size of the resultant image would exceed pname:maxResourceSize,
+then fname:vkCreateImage must: fail
+and return ename:VK_ERROR_OUT_OF_DEVICE_MEMORY.
+This failure may: occur even when all image creation parameters
+satisfy their valid usage requirements.
 
 ifdef::VK_VERSION_1_1,VK_KHR_maintenance2[]
 [NOTE]
@@ -655,26 +632,171 @@ a sname:VkImageView created from the image can: have (see
 ====
 endif::VK_VERSION_1_1,VK_KHR_maintenance2[]
 
+[[resources-image-creation-limits]]
+.Image Creation Limits
+****
+Valid values for some image creation parameters
+are limited by a numerical upper bound
+or by inclusion in a bitset.
+For example, sname:VkImageCreateInfo::pname:arrayLayers
+is limited by pname:imageCreateMaxArrayLayers, defined below;
+and sname:VkImageCreateInfo::pname:samples
+is limited by pname:imageCreateSampleCounts, also defined below.
+
+Several limiting values are defined below,
+as well as assisting values from which the limiting values are derived.
+The limiting values are referenced by the relevant valid usage statements
+of sname:VkImageCreateInfo.
+
+ifdef::VK_VERSION_1_1,VK_KHR_external_memory_capabilities[]
+* Let `VkExternalMemoryHandleTypeFlags imageCreateExternalMemoryHandles`
+  be the set of external memory handle types
+  that may: be used with the resultant image.
+  If sname:VkImageCreateInfo::pname:pNext contains an instance
+  of slink:VkExternalMemoryImageCreateInfo,
+  then pname:imageCreateExternalMemoryHandles is the value
+  of slink:VkExternalMemoryImageCreateInfo::pname:handleTypes.
+  Otherwise, pname:imageCreateExternalMemoryHandles is `0`
+endif::VK_VERSION_1_1,VK_KHR_external_memory_capabilities[]
+
+// NOTE: The following definition is currently trivial, but
+// VK_EXT_image_drm_format_modifier will complicate it.
+* Let `VkBool32 imageCreateMaybeLinear` indicate
+  if the resulant image may be <<glossary-linear-image,linear>>.
+  (The definition below is trivial because certain extensions
+  are disabled in this build of the specification).
+  ** If pname:tiling is ename:VK_IMAGE_TILING_LINEAR,
+     then pname:imageCreateMaybeLinear is `true`.
+  ** If pname:tiling is ename:VK_IMAGE_TILING_OPTIMAL,
+     then pname:imageCreateMaybeLinear is `false`.
+
+* Let `VkFormatFeatureFlags imageCreateFormatFeatures`
+  be the set of format features available during image creation.
+  ** If pname:tiling is ename:VK_IMAGE_TILING_LINEAR,
+     then pname:imageCreateFormatFeatures is
+     the value of slink:VkImageFormatProperties::pname:linearTilingFeatures
+     found by calling flink:vkGetPhysicalDeviceFormatProperties
+     with parameter pname:format equal to sname:VkImageCreateInfo::pname:format.
+  ** If pname:tiling is ename:VK_IMAGE_TILING_OPTIMAL,
+ifdef::VK_ANDROID_external_memory_android_hardware_buffer[]
+     and if the pname:pNext chain contains
+     no instance of slink:VkExternalFormatANDROID
+     with non-zero pname:externalFormat,
+endif::VK_ANDROID_external_memory_android_hardware_buffer[]
+     then pname:imageCreateFormatFeatures is
+     value of slink:VkImageFormatProperties::pname:optimalTilingFeatures
+     found by calling flink:vkGetPhysicalDeviceFormatProperties
+     with parameter pname:format equal to sname:VkImageCreateInfo::pname:format.
+ifdef::VK_ANDROID_external_memory_android_hardware_buffer[]
+  ** If pname:tiling is ename:VK_IMAGE_TILING_OPTIMAL,
+     and if the pname:pNext chain contains
+     an instance of slink:VkExternalFormatANDROID
+     with non-zero pname:externalFormat,
+     then pname:imageCreateFormatFeatures is the value of
+     slink:VkAndroidHardwareBufferFormatPropertiesANDROID::pname:formatFeatures
+     obtained by flink:vkGetAndroidHardwareBufferPropertiesANDROID with
+     a matching pname:externalFormat value.
+endif::VK_ANDROID_external_memory_android_hardware_buffer[]
+
+ifdef::VK_VERSION_1_1,VK_KHR_external_memory[]
+* Let `VkImageFormatProperties2 imageCreateImageFormatPropertiesList[]` be
+ifdef::VK_ANDROID_external_memory_android_hardware_buffer[]
+  defined as follows.
+  ** If sname:VkImageCreateInfo::pname:pNext contains
+     no instance of slink:VkExternalFormatANDROID
+     with non-zero pname:externalFormat,
+     then pname:imageCreateImageFormatPropertiesList is
+endif::VK_ANDROID_external_memory_android_hardware_buffer[]
+     the list of structures obtained
+     by calling flink:vkGetPhysicalDeviceImageFormatProperties2
+     for each bit in pname:imageCreateExternalMemoryHandles,
+     with slink:VkPhysicalDeviceExternalImageFormatInfo::pname:handleType
+     set to that bit.
+     (If pname:imageCreateExternalMemoryHandles is empty, then
+     pname:imageCreateImageFormatPropertiesList
+     is the list of structures obtained
+     by calling flink:vkGetPhysicalDeviceImageFormatProperties2
+     with slink:VkPhysicalDeviceExternalImageFormatInfo omitted or
+     with slink:VkPhysicalDeviceExternalImageFormatInfo::pname:handleType equal to `0`).
+     In each call, the parameters slink:VkPhysicalDeviceImageFormatInfo2::pname:format,
+     pname:imageType, pname:tiling, pname:usage, and pname:flags must: be equal to
+     those in sname:VkImageCreateInfo.
+     If any call returns an error,
+     then pname:imageCreateImageFormatPropertiesList is defined to be the empty list.
+ifdef::VK_ANDROID_external_memory_android_hardware_buffer[]
+  ** If sname:VkImageCreateInfo::pname:pNext contains
+     an instance of slink:VkExternalFormatANDROID
+     with non-zero pname:externalFormat,
+     then pname:imageCreateImageFormatPropertiesList contains a single element where:
+     *** sname:VkImageFormatProperties::pname:maxMipLevels is
+         [eq]#{lfloor}log~2~(max(pname:extent.width, pname:extent.height,
+         pname:extent.depth)){rfloor} {plus} 1#.
+     *** sname:VkImageFormatProperties::pname:maxArrayLayers
+         is slink:VkPhysicalDeviceLimits::maxImageArrayLayers.
+     *** Each component of sname:VkImageFormatProperties::pname:maxExtent is
+         slink:VkPhysicalDeviceLimits::maxImageDimension2D.
+     *** sname:VkImageFormatPropertoies::pname:sampleCounts
+         contains exactly ename:VK_SAMPLE_COUNT_1_BIT.
+endif::VK_ANDROID_external_memory_android_hardware_buffer[]
+
+* Let `uint32_t imageCreateMaxMipLevels` be
+ifndef::VK_VERSION_1_1,VK_KHR_external_memory[]
+  the value of slink:VkImageFormatProperties::pname:maxMipLevels
+  found by calling flink:vkGetPhysicalDeviceImageFormatProperties
+  with parameters pname:format, pname:imageType, pname:tiling,
+  pname:usage, and pname:flags equal to those in sname:VkImageCreateInfo.
+  If fname:vkGetPhysicalDeviceFormatProperties returns an error,
+  then pname:imageCreateMaxMipLevels is undefined.
+endif::VK_VERSION_1_1,VK_KHR_external_memory[]
+ifdef::VK_VERSION_1_1,VK_KHR_external_memory[]
+  the minimum value
+  of slink:VkImageFormatProperties::pname:maxMipLevels
+  in pname:imageCreateImageFormatPropertiesList.
+  The value is undefined if pname:imageCreateImageFormatPropertiesList is empty.
+endif::VK_VERSION_1_1,VK_KHR_external_memory[]
+
+* Let `uint32_t imageCreateMaxArrayLayers` be
+ifndef::VK_VERSION_1_1,VK_KHR_external_memory[]
+  defined analogously to pname:imageCreateMaxMipLevels.
+endif::VK_VERSION_1_1,VK_KHR_external_memory[]
+ifdef::VK_VERSION_1_1,VK_KHR_external_memory[]
+  the minimum value
+  of slink:VkImageFormatProperties::pname:maxArrayLayers
+  in pname:imageCreateImageFormatPropertiesList.
+  The value is undefined if pname:imageCreateImageFormatPropertiesList is empty.
+endif::VK_VERSION_1_1,VK_KHR_external_memory[]
+
+* Let `VkExtent3D imageCreateMaxExtent` be
+ifndef::VK_VERSION_1_1,VK_KHR_external_memory[]
+  defined analogously to pname:imageCreateMaxMipLevels.
+endif::VK_VERSION_1_1,VK_KHR_external_memory[]
+ifdef::VK_VERSION_1_1,VK_KHR_external_memory[]
+  the component-wise minimum
+  over all slink:VkImageFormatProperties::pname:maxExtent values
+  in pname:imageCreateImageFormatPropertiesList.
+  The value is undefined if pname:imageCreateImageFormatPropertiesList is empty.
+endif::VK_VERSION_1_1,VK_KHR_external_memory[]
+
+* Let `VkSampleCountFlags imageCreateSampleCounts` be
+ifndef::VK_VERSION_1_1,VK_KHR_external_memory[]
+  defined analogously to pname:imageCreateMaxMipLevels.
+endif::VK_VERSION_1_1,VK_KHR_external_memory[]
+ifdef::VK_VERSION_1_1,VK_KHR_external_memory[]
+  the intersection of each slink:VkImageFormatProperties::pname:sampleCounts
+  in pname:imageCreateImageFormatPropertiesList.
+  The value is undefined if pname:imageCreateImageFormatPropertiesList is empty.
+endif::VK_VERSION_1_1,VK_KHR_external_memory[]
+****
+
 .Valid Usage
 ****
-ifndef::VK_ANDROID_external_memory_android_hardware_buffer[]
-  * [[VUID-VkImageCreateInfo-format-00940]]
-    The combination of pname:format, pname:imageType, pname:tiling,
-    pname:usage, and pname:flags must: be supported, as indicated by a
-    ename:VK_SUCCESS return value from
-    fname:vkGetPhysicalDeviceImageFormatProperties invoked with the same
-    values passed to the corresponding parameters.
-endif::VK_ANDROID_external_memory_android_hardware_buffer[]
-ifdef::VK_ANDROID_external_memory_android_hardware_buffer[]
-  * [[VUID-VkImageCreateInfo-pNext-01889]]
-    If the pname:pNext chain does not contain an instance of
-    slink:VkExternalFormatANDROID, or if pname:format is not
-    ename:VK_FORMAT_UNDEFINED, the combination of pname:format,
-    pname:imageType, pname:tiling, pname:usage, and pname:flags must: be
-    supported, as indicated by a ename:VK_SUCCESS return value from
-    fname:vkGetPhysicalDeviceImageFormatProperties invoked with the same
-    values passed to the corresponding parameters.
-endif::VK_ANDROID_external_memory_android_hardware_buffer[]
+  * Each of the following values
+    (as described in <<resources-image-creation-limits,Image Creation Limits>>)
+    must: not be undefined:
+    pname:imageCreateMaxMipLevels,
+    pname:imageCreateMaxArrayLayers,
+    pname:imageCreateMaxExtent,
+    and pname:imageCreateSampleCounts.
   * [[VUID-VkImageCreateInfo-sharingMode-00941]]
     If pname:sharingMode is ename:VK_SHARING_MODE_CONCURRENT,
     pname:pQueueFamilyIndices must: be a valid pointer to an array of
@@ -732,45 +854,20 @@ ifdef::VK_VERSION_1_1,VK_KHR_maintenance1[]
     If pname:flags contains ename:VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT,
     pname:imageType must: be ename:VK_IMAGE_TYPE_3D
 endif::VK_VERSION_1_1,VK_KHR_maintenance1[]
-  * [[VUID-VkImageCreateInfo-imageType-00951]]
-    If pname:imageType is ename:VK_IMAGE_TYPE_1D, pname:extent.width must:
-    be less than or equal to
-    sname:VkPhysicalDeviceLimits::pname:maxImageDimension1D, or
-    sname:VkImageFormatProperties::pname:maxExtent.width (as returned by
-    fname:vkGetPhysicalDeviceImageFormatProperties with pname:format,
-    pname:imageType, pname:tiling, pname:usage, and pname:flags equal to
-    those in this structure) - whichever is higher
-  * [[VUID-VkImageCreateInfo-imageType-00952]]
-    If pname:imageType is ename:VK_IMAGE_TYPE_2D and pname:flags does not
-    contain ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, pname:extent.width
-    and pname:extent.height must: be less than or equal to
-    sname:VkPhysicalDeviceLimits::pname:maxImageDimension2D, or
-    sname:VkImageFormatProperties::pname:maxExtent.width/pname:height (as
-    returned by fname:vkGetPhysicalDeviceImageFormatProperties with
-    pname:format, pname:imageType, pname:tiling, pname:usage, and
-    pname:flags equal to those in this structure) - whichever is higher
-  * [[VUID-VkImageCreateInfo-imageType-00953]]
-    If pname:imageType is ename:VK_IMAGE_TYPE_2D and pname:flags contains
-    ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, pname:extent.width and
-    pname:extent.height must: be less than or equal to
-    sname:VkPhysicalDeviceLimits::pname:maxImageDimensionCube, or
-    sname:VkImageFormatProperties::pname:maxExtent.width/pname:height (as
-    returned by fname:vkGetPhysicalDeviceImageFormatProperties with
-    pname:format, pname:imageType, pname:tiling, pname:usage, and
-    pname:flags equal to those in this structure) - whichever is higher
+  * pname:extent.width must: be less than or equal to
+    pname:imageCreateMaxExtent.pname:width
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>).
+  * pname:extent.height must: be less than or equal to
+    pname:imageCreateMaxExtent.pname:height
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>).
+  * pname:extent.depth must: be less than or equal to
+    pname:imageCreateMaxExtent.pname:depth
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>).
   * [[VUID-VkImageCreateInfo-imageType-00954]]
     If pname:imageType is ename:VK_IMAGE_TYPE_2D and pname:flags contains
     ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, pname:extent.width and
     pname:extent.height must: be equal and pname:arrayLayers must: be
     greater than or equal to 6
-  * [[VUID-VkImageCreateInfo-imageType-00955]]
-    If pname:imageType is ename:VK_IMAGE_TYPE_3D, pname:extent.width,
-    pname:extent.height and pname:extent.depth must: be less than or equal
-    to sname:VkPhysicalDeviceLimits::pname:maxImageDimension3D, or
-    sname:VkImageFormatProperties::pname:maxExtent.width/pname:height/pname:depth
-    (as returned by fname:vkGetPhysicalDeviceImageFormatProperties with
-    pname:format, pname:imageType, pname:tiling, pname:usage, and
-    pname:flags equal to those in this structure) - whichever is higher
   * [[VUID-VkImageCreateInfo-imageType-00956]]
     If pname:imageType is ename:VK_IMAGE_TYPE_1D, both pname:extent.height
     and pname:extent.depth must: be `1`
@@ -781,26 +878,20 @@ endif::VK_VERSION_1_1,VK_KHR_maintenance1[]
     pname:mipLevels must: be less than or equal to the number of levels in
     the complete mipmap chain based on [eq]#pname:extent.width#,
     [eq]#pname:extent.height#, and [eq]#pname:extent.depth#.
-  * [[VUID-VkImageCreateInfo-extent-00959]]
-    pname:mipLevels must: be less than or equal to
-    sname:VkImageFormatProperties::pname:maxMipLevels (as returned by
-    fname:vkGetPhysicalDeviceImageFormatProperties with pname:format,
-    pname:imageType, pname:tiling, pname:usage, and pname:flags equal to
-    those in this structure)
-  * [[VUID-VkImageCreateInfo-arrayLayers-00960]]
-    pname:arrayLayers must: be less than or equal to
-    sname:VkImageFormatProperties::pname:maxArrayLayers (as returned by
-    fname:vkGetPhysicalDeviceImageFormatProperties with pname:format,
-    pname:imageType, pname:tiling, pname:usage, and pname:flags equal to
-    those in this structure)
+  * pname:mipLevels must: be less than or equal to pname:imageCreateMaxMipLevels
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>).
+  * pname:arrayLayers must: be less than or equal to pname:imageCreateMaxArrayLayers
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>).
   * [[VUID-VkImageCreateInfo-imageType-00961]]
     If pname:imageType is ename:VK_IMAGE_TYPE_3D, pname:arrayLayers must: be
     `1`.
-  * [[VUID-VkImageCreateInfo-samples-00962]]
-    If pname:samples is not ename:VK_SAMPLE_COUNT_1_BIT, pname:imageType
-    must: be ename:VK_IMAGE_TYPE_2D, pname:flags must: not contain
-    ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT, pname:tiling must: be
-    ename:VK_IMAGE_TILING_OPTIMAL, and pname:mipLevels must: be equal to `1`
+  * If pname:samples is not ename:VK_SAMPLE_COUNT_1_BIT,
+    then pname:imageType must: be ename:VK_IMAGE_TYPE_2D,
+    pname:flags must: not contain ename:VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT,
+    pname:mipLevels must: be equal to `1`,
+    and pname:imageCreateMaybeLinear
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>)
+    must: be `false`,
   * [[VUID-VkImageCreateInfo-usage-00963]]
     If pname:usage includes ename:VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT,
     then bits other than ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
@@ -826,12 +917,8 @@ endif::VK_VERSION_1_1,VK_KHR_maintenance1[]
     ename:VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
     ename:VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, or
     ename:VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT.
-  * [[VUID-VkImageCreateInfo-samples-00967]]
-    pname:samples must: be a bit value that is set in
-    sname:VkImageFormatProperties::pname:sampleCounts returned by
-    fname:vkGetPhysicalDeviceImageFormatProperties with pname:format,
-    pname:imageType, pname:tiling, pname:usage, and pname:flags equal to
-    those in this structure
+  * pname:samples must: be a bit value that is set in pname:imageCreateSampleCounts
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>).
   * [[VUID-VkImageCreateInfo-usage-00968]]
     If the <<features-features-shaderStorageImageMultisample,multisampled
     storage images>> feature is not enabled, and pname:usage contains
@@ -938,12 +1025,13 @@ ifdef::VK_VERSION_1_1,VK_KHR_device_group[]
     slink:VkDeviceGroupDeviceCreateInfo::pname:physicalDeviceCount equal to
     1, pname:flags must: not contain
     ename:VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT
-  * [[VUID-VkImageCreateInfo-flags-00992]]
-    If pname:flags contains
-    ename:VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT, then
-    pname:mipLevels must: be one, pname:arrayLayers must: be one,
-    pname:imageType must: be ename:VK_IMAGE_TYPE_2D, and pname:tiling must:
-    be ename:VK_IMAGE_TILING_OPTIMAL
+  * If pname:flags contains
+    ename:VK_IMAGE_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT,
+    then pname:mipLevels must: be one, pname:arrayLayers must: be one,
+    pname:imageType must: be ename:VK_IMAGE_TYPE_2D.
+    and pname:imageCreateMaybeLinear
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>)
+    must: be `false`.
 endif::VK_VERSION_1_1,VK_KHR_device_group[]
 ifdef::VK_VERSION_1_1,VK_KHR_maintenance2[]
   * [[VUID-VkImageCreateInfo-flags-01572]]
@@ -979,20 +1067,11 @@ ifdef::VK_VERSION_1_1,VK_KHR_sampler_ycbcr_conversion[]
     ** pname:samples must be ename:VK_SAMPLE_COUNT_1_BIT
     ** pname:imageType must: be ename:VK_IMAGE_TYPE_2D
     ** pname:arrayLayers must: be 1
-  * [[VUID-VkImageCreateInfo-tiling-01575]]
-    If pname:tiling is ename:VK_IMAGE_TILING_OPTIMAL, pname:format is a
-    _multi-planar_ format, and
-    sname:VkFormatProperties::pname:optimalTilingFeatures (as returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format) does not include ename:VK_FORMAT_FEATURE_DISJOINT_BIT,
-    pname:flags must: not contain ename:VK_IMAGE_CREATE_DISJOINT_BIT
-  * [[VUID-VkImageCreateInfo-tiling-01576]]
-    If pname:tiling is ename:VK_IMAGE_TILING_LINEAR, pname:format is a
-    _multi-planar_ format, and
-    sname:VkFormatProperties::pname:linearTilingFeatures (as returned by
-    fname:vkGetPhysicalDeviceFormatProperties with the same value of
-    pname:format) does not include ename:VK_FORMAT_FEATURE_DISJOINT_BIT,
-    pname:flags must: not contain ename:VK_IMAGE_CREATE_DISJOINT_BIT
+  * If pame:format is a _multi-planar_ format,
+    and if pname:imageCreateFormatFeatures
+    (as defined in <<resources-image-creation-limits,Image Creation Limits>>)
+    does not contain ename:VK_FORMAT_FEATURE_DISJOINT_BIT,
+    then pname:flags must: not contain ename:VK_IMAGE_CREATE_DISJOINT_BIT.
   * [[VUID-VkImageCreateInfo-format-01577]]
     If pname:format is not a _multi-planar_ format, and pname:flags does not
     include ename:VK_IMAGE_CREATE_ALIAS_BIT, pname:flags must: not contain
@@ -1014,12 +1093,6 @@ ifdef::VK_ANDROID_external_memory_android_hardware_buffer[]
     ** pname:mipLevels must: either be `1` or equal to the number of levels
        in the complete mipmap chain based on [eq]#pname:extent.width#,
        [eq]#pname:extent.height#, and [eq]#pname:extent.depth#.
-    ** If pname:format is not ename:VK_FORMAT_UNDEFINED, then pname:format,
-       pname:imageType, pname:tiling, pname:usage, pname:flags,
-       pname:mipLevels, and pname:samples must: be supported with
-       ename:VK_EXTERNAL_MEMORY_HANDLE_TYPE_ANDROID_HARDWARE_BUFFER_BIT_ANDROID
-       external memory handle types according to
-       flink:vkGetPhysicalDeviceImageFormatProperties2
     ** If pname:format is ename:VK_FORMAT_UNDEFINED, then the pname:pNext
        chain must: include a slink:VkExternalFormatANDROID structure whose
        pname:externalFormat member is not `0`
